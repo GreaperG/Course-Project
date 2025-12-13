@@ -25,7 +25,7 @@ COPY . .
 
 RUN npm run build
 
-RUN chown -R www-data:www-data var/
+RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
 
 EXPOSE 8080
 
