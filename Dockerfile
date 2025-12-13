@@ -24,7 +24,7 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-а
+
 RUN chown -R www-data:www-data var/
 
 EXPOSE 8080
