@@ -21,8 +21,6 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 
-COPY .env.prod .env.local
-
 COPY . .
 
 RUN npm run build
