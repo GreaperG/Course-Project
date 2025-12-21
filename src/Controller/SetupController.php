@@ -22,6 +22,13 @@ final class SetupController extends AbstractController
         $process = new Process(['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction']);
         $process->run();
 
-        return new Response('Migrating database...' . $process->getOutput());
+        $output = $process->getOutput();
+        $error = $process->getErrorOutput();
+        $exitCode = $process->getExitCode();
+
+        return new Response(
+            'Exit Code: ' . $exitCode . '<br><br>' .
+            'Output: <pre>' . $output . '</pre><br>' .
+            'Errors: <pre>' . $error . '</pre>'
     }
 }
