@@ -30,5 +30,6 @@ final class SetupController extends AbstractController
             'Exit Code: ' . $exitCode . '<br><br>' .
             'Output: <pre>' . $output . '</pre><br>' .
             'Errors: <pre>' . $error . '</pre>'
+        );
     }
 }
