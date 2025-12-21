@@ -15,8 +15,8 @@ final class SetupController extends AbstractController
     #[Route('/setup', name: 'app_setup')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
-        if($request->query->get('key') !== 'твой_секретный_ключ_123') {
-            throw new AccessDeniedException();
+        if($request->query->get('key') !== 'mys123') {
+            throw new AccessDeniedException('Wrong key');
         }
 
         $process = new Process(['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction']);
