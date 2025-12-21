@@ -19,7 +19,10 @@ final class SetupController extends AbstractController
             throw new AccessDeniedException('Wrong key');
         }
 
-        $process = new Process(['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction']);
+        $process = new Process(['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction'],
+        '/var/www/html'
+
+        );
         $process->run();
 
         $output = $process->getOutput();
