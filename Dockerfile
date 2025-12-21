@@ -15,7 +15,7 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --optimize-autoloader --no-scripts
 
 COPY package.json package-lock.json ./
 
@@ -24,8 +24,8 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-а
-RUN chown -R www-data:www-data var/
+
+RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
 
 EXPOSE 8080
 
