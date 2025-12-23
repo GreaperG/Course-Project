@@ -30,6 +30,9 @@ final class InventoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $inventory->setOwner($this->getUser());
+            $inventory->setUpdatedAt(new \DateTime());
+
             $entityManager->persist($inventory);
             $entityManager->flush();
 
@@ -38,7 +41,7 @@ final class InventoryController extends AbstractController
 
         return $this->render('inventory/new.html.twig', [
             'inventory' => $inventory,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 

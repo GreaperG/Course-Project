@@ -12,17 +12,15 @@
                 <td>{{ inventory.id }}</td>
             </tr>
             <tr>
-                <th>Item</th>
-                <td>{{ inventory.Item }}</td>
-            </tr>
-            <tr>
-                <th>CustomField</th>
-                <td>{{ inventory.CustomField }}</td>
+                <th>items</th>
+                <td>{{ inventory.items|length }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_inventory_index') }}">back to list</a>
+
+    <a href="{{ path('app_inventory_items', {'inventoryId': inventory.id}) }}">Add Items</a>
 
     <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}">edit</a>
 
