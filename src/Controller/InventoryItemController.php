@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Form\ItemType;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 final class InventoryItemController extends AbstractController
 {
@@ -43,14 +45,22 @@ final class InventoryItemController extends AbstractController
         $item->setInventory($inventory);
         $item->setCreatedBy($this->getUser());
 
-        $response = $this->handleItemForm($item, $request, $em);
-        if($response){
-            return $response;
+        $form = $this->createForm(ItemType::class, $item);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($item);
+            $em->flush();
+
+            return $this->redirectToRoute('app_inventory_items', [
+                'inventoryId' => $inventoryId,
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('inventory_item/create.html.twig', [
-            'form' => $this->createForm(ItemType::class, $item)->createView(),
-            'inventory' => $item,
+            'form' => $form->createView(),
+            'inventory' => $inventory,
+            'item' => $item,
         ]);
     }
     #[Route('/inventory/{inventoryId}/item/{id}/edit', name: 'app_inventory_item_edit')]
@@ -96,10 +106,13 @@ final class InventoryItemController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            if(!$em->contains($item)){
+                $em->persist($item);
+            }
             $em->flush();
 
-            return $this->redirectToRoute('app_inventory_item_index',[
-                'id' => $item->getInventory()->getId()
+            return $this->redirectToRoute('app_inventory_items',[
+                'inventoryId' => $item->getInventory()->getId()
             ]);
 
         }

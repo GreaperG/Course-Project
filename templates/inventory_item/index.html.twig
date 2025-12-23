@@ -10,22 +10,31 @@
             Add New Item
         {#  <p>Inventory ID: {{ inventory.id }}</p>#}
 
-        {% if items|length > 0 %}
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Created By</th>
-                </tr>
-                {% for item in items %}
+            {% if items|length > 0 %}
+                <table border="1" class="table">
                     <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.createdBy.username|default('Unknown') }}</td>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Actions</th>
                     </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <p>No items</p>
-        {% endif %}
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.customId }}</td>
+                            <td>{{ item.inventory.title }}</td>
+                            <td>
+                                {#  <a href="{{ path('app_inventory_item_show', {'id': item.id}) }}">show</a>#}
+                                <a href="{{ path('app_inventory_item_edit', {
+                                    'id': item.id,
+                                    'inventoryId': item.inventory.id
+                                }) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No items</p>
+            {% endif %}
 
         <br>
         <a href="/">Back</a>
