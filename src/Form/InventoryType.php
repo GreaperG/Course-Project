@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Inventory;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +16,17 @@ class InventoryType extends AbstractType
 
             ->add('Title')
             ->add('Description')
-            ->add('Category')
+            ->add('category', ChoiceType::class, [
+                'choices' => [
+                    'Equipment' => 'equipment',
+                    'Tools' => 'tools',
+                    'Books' => 'books',
+                    'Furniture' => 'furniture',
+                    'Other' => 'other',
+                ],
+                'placeholder' => 'Choose Category',
+            ])
+            ->add('isPublic')
         ;
     }
 

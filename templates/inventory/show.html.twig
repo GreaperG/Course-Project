@@ -18,11 +18,12 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_inventory_index') }}">back to list</a>
+    <a href="{{ path('app_inventory_index') }}">Back to List</a>
 
     <a href="{{ path('app_inventory_items', {'inventoryId': inventory.id}) }}">Add Items</a>
 
-    <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}">edit</a>
+    <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}">Edit Inventory</a>
+
 
     {{ include('inventory/_delete_form.html.twig') }}
 {% endblock %}

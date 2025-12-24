@@ -8,35 +8,56 @@
         <a href="{{ path('app_inventory_item_create', {'inventoryId': inventory.id}) }}"
            class="btn btn-primary">
             Add New Item
+        </a>
         {#  <p>Inventory ID: {{ inventory.id }}</p>#}
 
             {% if items|length > 0 %}
-                <table border="1" class="table">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
                     <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Category</th>
+                        <th>CustomId</th>
+                        <th>CreatedBy</th>
+                        <th>CreatedAt</th>
                         <th>Actions</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     {% for item in items %}
                         <tr>
                             <td>{{ item.customId }}</td>
-                            <td>{{ item.inventory.title }}</td>
+                            <td>{{ item.createdBy.username }}</td>
+                            <td>{{ item.createdAt|date('Y-m-d H:i') }}</td>
                             <td>
                                 {#  <a href="{{ path('app_inventory_item_show', {'id': item.id}) }}">show</a>#}
                                 <a href="{{ path('app_inventory_item_edit', {
                                     'id': item.id,
                                     'inventoryId': item.inventory.id
-                                }) }}">edit</a>
+                                }) }}" class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                                <a href="{{ path('app_inventory_item_delete', {
+                                    'inventoryId': item.inventory.id,
+                                    'id': item.id
+                                }) }}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure?')">
+                                    Delete
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
             {% else %}
-                <p>No items</p>
+                <div class="alert alert-info">
+                    No items yet.
+                    <a href="{{ path('app_inventory_item_create', {'inventoryId': inventory.id}) }}">
+                        Create the first one!
+                    </a>
+                </div>
             {% endif %}
 
-        <br>
-        <a href="/">Back</a>
+            <a href="{{ path('app_inventory_index') }}" class="btn btn_secondary mt-3">
+                Back to Inventories
+            </a>
     </div>
 {% endblock %}

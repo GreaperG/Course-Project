@@ -8,7 +8,9 @@ use App\Form\ItemType;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Dom\Entity;
 use phpDocumentor\Reflection\DocBlock\Tags\Method;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,15 +84,23 @@ final class InventoryItemController extends AbstractController
         ]);
     }
 
-    #[Route('/inventory/{inventoryId}/item/{id}/delete', name: 'app_inventory_item_delete', methods: ['POST'])]
-    public function delete(Item $item, EntityManagerInterface $em,): Response
+    #[Route('/inventory/{inventoryId}/item/{id}/delete', name: 'app_inventory_item_delete')]
+    public function delete(int $inventoryId,int $id, EntityManagerInterface $em): Response
     {
+        $item = $em->getRepository(Item::class)->find($id);
 
-        $inventory = $item->getInventory();
-        $this->checkAccess($inventory);
+        if (!$item) {
+            throw $this->createNotFoundException('Item not found');
+        }
+
+        if ($item->getInventory()->getId() !== $inventoryId) {
+            throw $this->createNotFoundException('Item does not belong to this inventory');
+        }
+        $this->checkAccess($item->getInventory());
+
         $em->remove($item);
         $em->flush();
-        return $this->redirectToRoute('app_inventory_item_index', ['inventoryId' => $inventory->getId()]);
+        return $this->redirectToRoute('app_inventory_items', ['inventoryId' => $inventoryId]);
     }
     private function checkAccess(Inventory $inventory): void
     {
