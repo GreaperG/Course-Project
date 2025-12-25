@@ -1,3 +1,6 @@
 easy_admin:
     assets:
-        use_importmap: false
+        css:
+            - 'bundles/easyadmin/app.css'
+        js:
+            - 'bundles/easyadmin/app.js'
