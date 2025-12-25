@@ -1,0 +1,3 @@
+easy_admin:
+    assets:
+        use_importmap: false
