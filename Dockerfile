@@ -17,13 +17,13 @@ COPY composer.json composer.lock ./
 
 RUN composer install --optimize-autoloader --no-scripts
 
-# COPY package.json package-lock.json ./
+COPY package.json package-lock.json ./
 
-# RUN npm install
+RUN npm install
 
 COPY . .
 
-# RUN npm run build
+RUN npm run build
 
 RUN php bin/console importmap:install --env=prod
 
