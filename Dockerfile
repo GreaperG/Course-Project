@@ -17,25 +17,23 @@ COPY composer.json composer.lock ./
 
 RUN composer install --optimize-autoloader --no-scripts
 
-COPY package.json package-lock.json ./
-
 COPY . .
 
+RUN php bin/console assets:install public
 
-RUN php bin/console importmap:install --env=prod
+COPY package.json package-lock.json ./
 
-# RUN php bin/console asset-map:compile --env=prod
-
-RUN npm install
+RUN np, ci
 
 RUN npm run build
 
+RUN php bin/console importmap:install --env=prod
+RUN php bin/console importmap:compile --env=prod
 
 RUN rm -rf var/cache/*
 RUN mkdir -p var/cache var/log
 RUN php bin/console cache:warmup --env=prod
-RUN chown -R www-data:www-data var/
-
+RUN chown -R www-data:www-data var/ public/
 
 EXPOSE 8080
 
