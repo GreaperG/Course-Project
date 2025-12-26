@@ -23,7 +23,7 @@ RUN php bin/console assets:install public
 
 COPY package.json package-lock.json ./
 
-RUN np, ci
+RUN npm ci
 
 RUN npm run build
 
