@@ -25,8 +25,6 @@ RUN rm -rf public/assets/* public/build/*
 
 RUN php bin/console importmap:install --env=prod
 
-RUN php bin/console asset-map:compile --env=prod --force
-
 RUN npm install
 
 RUN npm run build --production
