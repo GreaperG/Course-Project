@@ -21,13 +21,15 @@ COPY package.json package-lock.json ./
 
 COPY . .
 
+RUN rm -rf public/assets/* public/build/*
+
 RUN php bin/console importmap:install --env=prod
 
-RUN php bin/console asset-map:compile --env=prod
+RUN php bin/console asset-map:compile --env=prod --force
 
 RUN npm install
 
-RUN npm run build
+RUN npm run build --production
 
 RUN ls -la public/
 RUN ls -la public/assets/
