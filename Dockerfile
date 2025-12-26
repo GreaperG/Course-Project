@@ -35,7 +35,8 @@ RUN ls -la public/build/
 
 
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
-RUN php bin/console cache:clear --env=prod
+RUN php bin/console cache:clear --env=prod --no-warmup
+RUN php bin/console cache:warmup --env=prod
 
 EXPOSE 8080
 
