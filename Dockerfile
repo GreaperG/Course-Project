@@ -28,7 +28,7 @@ RUN npm ci
 RUN npm run build
 
 RUN php bin/console importmap:install --env=prod
-RUN php bin/console importmap:compile --env=prod
+RUN php bin/console asset-map:compile --env=prod
 
 RUN rm -rf var/cache/*
 RUN mkdir -p var/cache var/log
