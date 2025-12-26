@@ -29,8 +29,15 @@ RUN npm install
 
 RUN npm run build
 
+RUN ls -la public/
+RUN ls -la public/assets/
+RUN ls -la public/build/
+
+
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
+RUN php bin/console cache:clear --env=prod
 
 EXPOSE 8080
 
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+
