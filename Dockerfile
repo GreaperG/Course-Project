@@ -30,14 +30,12 @@ RUN npm install
 
 RUN npm run build
 
-RUN ls -la public/
-RUN ls -la public/assets/
-RUN ls -la public/build/
 
 RUN rm -rf var/cache/*
-RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
-RUN php bin/console cache:clear --env=prod --no-warmup
+RUN mkdir -p var/cache var/log
 RUN php bin/console cache:warmup --env=prod
+RUN chown -R www-data:www-data var/
+
 
 EXPOSE 8080
 
