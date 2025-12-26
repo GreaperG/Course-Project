@@ -25,8 +25,6 @@ COPY . .
 
 # RUN npm run build
 
-RUN rm -rf importmap.php public/assets/*
-
 RUN php bin/console importmap:install --env=prod
 
 RUN php bin/console asset-map:compile --env=prod
