@@ -17,24 +17,24 @@ COPY composer.json composer.lock ./
 
 RUN composer install --optimize-autoloader --no-scripts
 
-COPY package.json package-lock.json ./
+# COPY package.json package-lock.json ./
 
-RUN npm install
+# RUN npm install
 
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
 RUN rm -rf importmap.php public/assets/*
-
-RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
-
-EXPOSE 8080
 
 RUN php bin/console importmap:install --env=prod
 
 RUN php bin/console asset-map:compile --env=prod
 
 RUN php bin/console cache:clear --env=prod
+
+RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
+
+EXPOSE 8080
 
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
