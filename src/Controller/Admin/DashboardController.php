@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Item;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -15,16 +14,14 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-        return parent::index();
+        return $this->render('admin/dashboard.html.twig');
 
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Inventory Admin Panel')
-            ->setFaviconPath('favicon.ico')
-            ->setTextDirection('ltr');
+            ->setTitle('App');
     }
 
     public function configureMenuItems(): iterable
@@ -32,9 +29,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
         yield MenuItem::section('User Management');
-        yield MenuItem::linkToCrud('Items', 'fa fa-list', Item::class);
         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
-
-        yield MenuItem::linkToLogout('Logout', 'fa fa-sign-out');
     }
 }
