@@ -19,13 +19,15 @@ RUN composer install --optimize-autoloader --no-scripts
 
 COPY package.json package-lock.json ./
 
-RUN npm install
-
 COPY . .
 
-RUN npm run build
-
 RUN php bin/console importmap:install --env=prod
+
+RUN php bin/console asset-map:compile --env=prod
+
+RUN npm install
+
+RUN npm run build
 
 RUN mkdir -p var/cache var/log && chown -R www-data:www-data var/
 
