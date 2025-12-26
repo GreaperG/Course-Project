@@ -1,6 +1,15 @@
-{# templates/admin/my_dashboard.html.twig #}
-{% extends '@EasyAdmin/layout.html.twig' %}
+{% extends '@EasyAdmin/page/content.html.twig' %}
 
-{% block main %}
-    {# ... #}
-{% endblock main %}
+{% block content %}
+    <h1>Welcome to Admin Panel</h1>
+
+    <div class="content-panel">
+        <p>Choose an action from the menu.</p>
+
+        <a class="btn btn-primary" href="{{ ea_url()
+            .setController('App\\Controller\\Admin\\UserCrudController')
+        }}">
+            Go to Users
+        </a>
+    </div>
+{% endblock %}
