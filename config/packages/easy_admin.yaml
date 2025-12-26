@@ -1,6 +1,4 @@
 easy_admin:
-    assets:
-        css:
-            - 'bundles/easyadmin/app.css'
-        js:
-            - 'bundles/easyadmin/app.js'
+    design:
+        assets:
+            enabled: false 
