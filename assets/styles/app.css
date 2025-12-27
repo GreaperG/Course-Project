@@ -1,3 +1,140 @@
 body {
-    background-color: skyblue;
+    background-color: #FFFFFF;
+}
+/* assets/styles/app.css - добавь эти стили */
+
+.form-control-limited {
+    max-width: 500px;
+}
+
+/* Таблица Inventories */
+.table-inventories {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #dee2e6;
+}
+
+.table-inventories thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.table-inventories thead th {
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-inventories tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.table-inventories tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+.table-inventories tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Стили для ID */
+.inventory-id {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 1.1rem;
+}
+
+/* Стили для категории */
+.inventory-category {
+    color: #2d3436;
+    font-weight: 500;
+}
+
+/* Стили для items */
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.item-badge {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 15px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    color: #495057;
+}
+
+.items-column {
+    max-height: 200px;      /* максимальная высота */
+    overflow-y: auto;       /* скролл если много */
+    white-space: nowrap;    /* не переносить */
+}
+
+/* Стили для кнопок действий */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-show {
+    background: #667eea;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-show:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.btn-edit {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-edit:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+    color: #212529;
+}
+
+/* Кнопка создания */
+.btn-create {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    color: white;
 }

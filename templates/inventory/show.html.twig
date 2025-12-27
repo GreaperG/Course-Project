@@ -4,8 +4,10 @@
 
 {% block body %}
     <h1>Inventory</h1>
-
-    <table class="table">
+<div class="container">
+  <div class="row justify-content-center">
+      <div class="col-md-16 col-lg-12">
+    <table class="table table-striped table-hover table-bordered">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -15,15 +17,30 @@
                 <th>items</th>
                 <td>{{ inventory.items|length }}</td>
             </tr>
+        <tr>
+            <th>UpdatedAt</th>
+            <td>{{ inventory.updatedAt|date('Y-m-d H:i') }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_inventory_index') }}">Back to List</a>
+    <a href="{{ path('app_inventory_index') }}" class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>Back to List
+    </a>
 
-    <a href="{{ path('app_inventory_items', {'inventoryId': inventory.id}) }}">Add Items</a>
+    <a href="{{ path('app_inventory_items', {'inventoryId': inventory.id}) }}" class="btn btn-outline-dark">
+        <i class="fas fa arrow-left"></i>Add Items
+    </a>
 
-    <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}">Edit Inventory</a>
+    <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}" class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>Edit Inventory
+    </a>
 
+    <a href="{{ ('app_inventory_delete') }}" class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>Delete Inventory
+    </a>
+            </div>
+      </div>
+</div>
 
-    {{ include('inventory/_delete_form.html.twig') }}
 {% endblock %}

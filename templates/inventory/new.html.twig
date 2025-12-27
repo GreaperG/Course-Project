@@ -4,8 +4,44 @@
 
 {% block body %}
     <h1>Create new Inventory</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
-    {{ include('inventory/_form.html.twig') }}
+   {{ form_start(form) }}
 
-    <a href="{{ path('app_inventory_index') }}">back to list</a>
+      {{ form_row(form.Title,{
+          'row_attr':{'class': 'mb-3'},
+          'label_attr':{'class':'form-label'},
+          'attr':{'class': 'form-control'}
+      }) }}
+
+      {{ form_row(form.Description,{
+          'row_attr':{'class': 'mb-3'},
+          'label_attr':{'class':'form-label'},
+          'attr':{'class': 'form-control'}
+      }) }}
+
+    {{ form_row(form.category,{
+        'row_attr':{'class': 'mb-3'},
+        'label_attr':{'class':'form-label'},
+        'attr':{'class': 'form-control'}
+    }) }}
+
+    {{ form_row(form.isPublic,{
+        'row_attr':{'class': 'mb-3'},
+        'label_attr':{'class':'form-check-label'},
+        'attr':{'class': 'form-check-input'}
+    })}}
+
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+    <a href="{{path('app_inventory_index') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i>Back to list
+    </a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
 {% endblock %}
