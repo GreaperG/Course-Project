@@ -1,4 +1,4 @@
-.g{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Homepage{% endblock %}
 
@@ -20,7 +20,7 @@
                         <a class="nav-link active" aria-current="page" href="{{ path('app_home_page') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">User profile</a>
+                        <a class="nav-link active" href="{{ path('app_home_userPage') }}">User profile</a>
                     </li>
                 </ul>
 
@@ -32,26 +32,28 @@
         </div>
     </nav>
 
-<div class="container py-5">
-    <div class="row justify-content-center align-items-center">
-        <div class="col-md-8 col-lg-6">
-         <div class="card-shadow">
-             <div class="card-body">
+    {# В user.html.twig #}
+    <div class="page-container">
+        <div class="simple-sidebar">
+            <div class="sidebar-block">
+                <h4 class="sidebar-title">📦 My inventories</h4>
+                <div class="inventory-list">
+                    {% for inventory in inventories %}
+                        <div class="inventory-item">
+                            <div class="inventory-title">{{ inventory.title }}</div>
+                            <div class="inventory-description">{{ inventory.description }}</div>
+                            <div class="inventory-category">{{ inventory.category }}</div>
+                        </div>
+                    {% else %}
+                        <p class="no-inventories">No inventories</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
-    <h3 class="text-center mt-4">LatestInventories</h3>
-      {% for inventory in latestInventories %}
-       <div class="card mb-2">
-           <div class="card-body">
-               <h5>{{ inventory.title }}</h5>
-               <small class="text-muted"?>
-                   Updated: {{ inventory.updatedAt|date('Y-m-d H:i') }}
-               </small>
-           </div>
-       </div>
-    {% endfor %}
-             </div>
-           </div>
+        <div class="main-content">
+            <h1>Hello, {{ user.username }}!</h1>
+            {# Остальной контент #}
         </div>
     </div>
-</div>
 {% endblock %}

@@ -22,8 +22,6 @@ final class HomePageController extends AbstractController
 
         $latestInventories = $entityManager->getRepository(Inventory::class)
             ->createQueryBuilder('i')
-            ->where('i.owner = :user')
-            ->setParameter('user', $this->getUser())
             ->orderBy('i.createdAt', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
@@ -33,16 +31,21 @@ final class HomePageController extends AbstractController
             'latestInventories' => $latestInventories,
         ]);
     }
-    #[Route('/home/userPage', name: 'app_home_usePage')]
-    public function userPage(EntityManagerInterface $entityManager): Response
+    #[Route('/home/userPage', name: 'app_home_userPage')]
+    public function userPage(EntityManagerInterface $entityManager,InventoryRepository $inventoryRepository): Response
     {
         $user = $this->getUser();
         if(!$user){
             return $this->redirectToRoute('app_login');
         }
 
+        $inventories = $inventoryRepository->findBy(['owner' => $user]);
+        if(empty($inventories)) {
+            throw $this->createNotFoundException();
+        }
         return $this->render('home_page/user.html.twig', [
             'user' => $user,
+            'inventories' => $inventories,
         ]);
     }
 }

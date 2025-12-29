@@ -38,7 +38,8 @@ final class InventoryItemController extends AbstractController
      public function createItem(int $inventoryId, Request $request, EntityManagerInterface $em): Response
     {
         $inventory = $this->findInventoryOrThrow($inventoryId, $em);
-        $this->checkAccess($inventory);
+
+        $this->denyAccessUnlessGranted('EDIT', $inventory);
 
         $item = new Item();
         $item->setInventory($inventory);
@@ -67,7 +68,7 @@ final class InventoryItemController extends AbstractController
     {
         $inventory = $item->getInventory();
 
-        $this->checkAccess($inventory);
+        $this->denyAccessUnlessGranted('EDIT', $inventory);
 
         $response = $this->handleItemForm($item, $request, $em);
         if($response){
@@ -86,6 +87,8 @@ final class InventoryItemController extends AbstractController
     {
         $item = $em->getRepository(Item::class)->find($id);
 
+        $this->denyAccessUnlessGranted('DELETE', $item);
+
         if (!$item) {
             throw $this->createNotFoundException('Item not found');
         }
@@ -93,19 +96,13 @@ final class InventoryItemController extends AbstractController
         if ($item->getInventory()->getId() !== $inventoryId) {
             throw $this->createNotFoundException('Item does not belong to this inventory');
         }
-        $this->checkAccess($item->getInventory());
+
 
         $em->remove($item);
         $em->flush();
         return $this->redirectToRoute('app_inventory_items', ['inventoryId' => $inventoryId]);
     }
-    private function checkAccess(Inventory $inventory): void
-    {
-        $user = $this->getUser();
-        if($inventory->getOwner() !== $user && !$this->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-    }
+
 
     private function handleItemForm(Item $item, Request $request, EntityManagerInterface $em): ?Response
     {

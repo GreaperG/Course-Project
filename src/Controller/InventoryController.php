@@ -56,6 +56,8 @@ final class InventoryController extends AbstractController
     #[Route('/{id}/edit', name: 'app_inventory_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Inventory $inventory, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $inventory);
+
         $form = $this->createForm(InventoryType::class, $inventory);
         $form->handleRequest($request);
 
@@ -64,6 +66,8 @@ final class InventoryController extends AbstractController
 
             return $this->redirectToRoute('app_inventory_index', [], Response::HTTP_SEE_OTHER);
         }
+
+
 
         return $this->render('inventory/edit.html.twig', [
             'inventory' => $inventory,
@@ -74,6 +78,7 @@ final class InventoryController extends AbstractController
     #[Route('/{id}', name: 'app_inventory_delete', methods: ['POST'])]
     public function delete(Request $request, Inventory $inventory, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('DELETE', $inventory);
         if ($this->isCsrfTokenValid('delete'.$inventory->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($inventory);
             $entityManager->flush();
