@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inventory{% endblock %}
+{% block title %}{{ 'nav.inventories'|trans }}{% endblock %}
 
 {% block body %}
     <h1>Inventory</h1>
@@ -36,8 +36,8 @@
         <i class="fas fa-arrow-left"></i>Edit Inventory
     </a>
 
-    <a href="{{ ('app_inventory_delete') }}" class="btn btn-outline-dark">
-        <i class="fas fa-arrow-left"></i>Delete Inventory
+    <a class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>{{ include('inventory/_delete_form.html.twig') }}
     </a>
             </div>
       </div>
