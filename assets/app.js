@@ -61,17 +61,16 @@ document.getElementById('deleteSelectedBtn').addEventListener('click', function(
 
     if (selected && confirm('Delete selected inventory?')) {
         const id = selected.value;
+        const csrfToken = selected.dataset.csrf; // ← Берем из data-csrf чекбокса!
 
-        // Создаём форму для DELETE
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/inventory/${id}`;
 
-        // CSRF токен
         const csrf = document.createElement('input');
         csrf.type = 'hidden';
         csrf.name = '_token';
-        csrf.value = '{{ csrf_token(\'delete\' ~ inventory.id) }}';
+        csrf.value = csrfToken;
 
         form.appendChild(csrf);
         document.body.appendChild(form);

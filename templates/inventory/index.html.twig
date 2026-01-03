@@ -45,7 +45,12 @@
         <tbody>
         {% for inventory in inventories %}
             <tr>
-                <td><input type="checkbox" name="inventorys_ids[]" value="{{ inventory.id }}"></td>
+                <td>
+                    <input type="checkbox"
+                           name="inventorys_ids[]"
+                           value="{{ inventory.id }}"
+                           data-csrf="{{ csrf_token('delete' ~ inventory.id) }}">
+                    </td>
                 <td class="text-center fw-bold">
                     <span class="badge bg-primary">{{ inventory.id }}</span>
                 </td>
