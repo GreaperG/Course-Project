@@ -49,8 +49,12 @@
          </li>
          {% endfor %}
      </ul>
-     <button type="button" class="add_item_link" data-collection-holder-class="attributes">Add a attribute</button>
 
+            <button type="button"
+                    class="btn btn-outline-dark add_item_link"
+                    data-collection-holder-class="attributes">
+                <i class="fas fa-plus"></i>Add a attribute
+            </button>
 
     <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
 

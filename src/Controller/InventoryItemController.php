@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Inventory;
 use App\Entity\Item;
+use App\Entity\ItemAttributeValue;
 use App\Form\ItemType;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemRepository;
@@ -49,6 +50,23 @@ final class InventoryItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach($inventory->getInventoryAttributes() as $attribute) {
+                $fieldName = 'attr_' . $attribute->getId();
+                $value = $form->get($fieldName)->getData();
+
+                if($value === null || $value === '') {
+                    continue;
+                }
+
+                $attrValue = new ItemAttributeValue();
+                $attrValue->setAttribute($attribute);
+                $attrValue->setValue((string) $value);
+
+                $item->addItemAttributeValue($attrValue);
+
+                $em->persist($attrValue);
+            }
             $em->persist($item);
             $em->flush();
 

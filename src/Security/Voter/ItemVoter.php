@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -15,14 +16,8 @@ final class ItemVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-       if(in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])){
-           return false;
-       }
-
-       if(in_array($attribute, [self::VIEW, self::DELETE])){
-           return false;
-       }
-       return true;
+        return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
+            && $subject instanceof Item;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
@@ -72,7 +67,7 @@ final class ItemVoter extends Voter
         return true;
     }
 
-    private function canDelete(Item $item, $inventory,User $user): bool
+    private function canDelete(Item $item,Inventory $inventory,User $user): bool
     {
         return $inventory->getOwner() === $user || $item->getCreatedBy() === $user;
     }

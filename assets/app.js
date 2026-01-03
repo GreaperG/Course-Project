@@ -55,3 +55,35 @@ function addAttributeFormDeleteLink(item) {
         item.remove();
     });
 }
+
+document.getElementById('deleteSelectedBtn').addEventListener('click', function() {
+    const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
+
+    if (selected && confirm('Delete selected inventory?')) {
+        const id = selected.value;
+
+        // Создаём форму для DELETE
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/inventory/${id}/delete`;
+
+        // CSRF токен
+        const csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = '_token';
+        csrf.value = '{{ csrf_token("delete") }}';
+
+        form.appendChild(csrf);
+        document.body.appendChild(form);
+        form.submit();
+    }
+});
+
+// Включаем кнопки при выборе
+document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+        const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
+        document.getElementById('editSelectedBtn').disabled = !hasSelection;
+        document.getElementById('deleteSelectedBtn').disabled = !hasSelection;
+    });
+});

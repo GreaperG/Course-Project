@@ -3,44 +3,60 @@
 {% block title %} Items - {{ inventory.title }} {% endblock %}
 
 {% block body %}
-<div class="container py-5">
+
+
+
+<div class="container mt-5">
     <div style="padding: 20px;">
         <h1>Items in inventory "{{ inventory.title }}"</h1>
         {#  <p>Inventory ID: {{ inventory.id }}</p>#}
 
             {% if items|length > 0 %}
-                <table class="table-striped table-hover table-bordered">
+                <table class="table table-striped table-hover table-bordered">
                     <thead class="table-dark">
                     <tr>
+                        <th><input type="checkbox" id="select-all"></th>
                         <th>CustomId</th>
-                        <th>CreatedBy</th>
-                        <th>CreatedAt</th>
-                        <th>Actions</th>
+                        {% for attribute in inventory.inventoryAttributes %}
+                           <th>{{ attribute.name }}</th>
+                        {% endfor %}
+                        <th>Created By</th>
+                        <th>Created At</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for item in items %}
                         <tr>
+                            <td><input type="checkbox" name="items_ids[]" value="{{ item.id }}"></td>
                             <td>{{ item.customId }}</td>
+                            {% for attribute in inventory.inventoryAttributes %}
+                                <td>
+                                    {% set valueFound = false %}
+                                    {% for attrValue in item.itemAttributeValues %}
+                                        {% if attrValue.attribute.id == attribute.id %}
+                                            {% if attribute.type.value == 'bool' %}
+                                                {% if attrValue.value == '1' or attrValue.value == 'true' %}
+                                                    <span class="badge bg-success">✓ Yes</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">✗ No</span>
+                                                {% endif %}
+                                            {% elseif attribute.type.value == 'int' %}
+                                                <span class="text-end d-block">{{ attrValue.value }}</span>
+                                            {% else %}
+                                                {{ attrValue.value }}
+                                            {% endif %}
+                                            {% set valueFound = true %}
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {% if not valueFound %}
+                                        <span class="text-muted fst-italic">-</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
                             <td>{{ item.createdBy.username }}</td>
                             <td>{{ item.createdAt|date('Y-m-d H:i') }}</td>
-                            <td>
-                                {#  <a href="{{ path('app_inventory_item_show', {'id': item.id}) }}">show</a>#}
-                                <a href="{{ path('app_inventory_item_edit', {
-                                    'id': item.id,
-                                    'inventoryId': item.inventory.id
-                                }) }}" class="btn btn-sm btn-warning">
-                                    Edit
-                                </a>
-                                <a href="{{ path('app_inventory_item_delete', {
-                                    'inventoryId': item.inventory.id,
-                                    'id': item.id
-                                }) }}"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Are you sure?')">
-                                    Delete
-                                </a>
-                            </td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -53,13 +69,77 @@
                 </div>
             {% endif %}
 
-        <a href="{{ path('app_inventory_item_create', {'inventoryId': inventory.id}) }}" class="btn btn-primary">
-           <i class="fas fa-save"></i>Add New Item
-        </a>
 
-            <a href="{{ path('app_inventory_index') }}" class="btn btn-outline-dark">
-               <i class="fas fa-arrow-left"></i>Back to Inventories
-            </a>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group me-2" role="group">
+                <a href="{{ path('app_inventory_item_create', {'inventoryId': inventory.id}) }}" class="btn btn-primary">
+                    <i class="fas fa-save"></i>Add New Item
+                </a>
+            </div>
+
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group me-2" role="group">
+                    <a href="{{ path('app_inventory_index') }}" class="btn btn-outline-dark">
+                        <i class="fas fa-arrow-left"></i>Back to Inventories
+                    </a>
+                </div>
+
+                <button type="button"
+                        id="deleteSelectedBtn"
+                        class="btn btn-outline-danger"
+                        disabled>
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
     </div>
 </div>
+
+        <script>
+            document.getElementById('select-all').addEventListener('change', function() {
+                document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
+            });
+
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function(el) {
+                return new bootstrap.Tooltip(el)
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteBtn = document.getElementById('deleteSelectedBtn');
+
+                document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => {
+                    cb.addEventListener('change', function() {
+                        const hasSelection = document.querySelectorAll('input[name="items_ids[]"]:checked').length > 0;
+                        deleteBtn.disabled = !hasSelection;
+                    });
+                });
+
+
+                deleteBtn.addEventListener('click', function() {
+                    const selected = document.querySelector('input[name="items_ids[]"]:checked');
+
+                    if (selected && confirm('Delete selected item?')) {
+                        const itemId = selected.value;
+                        const inventoryId = {{ inventory.id }};
+
+
+                        const csrfToken = document.querySelector(`input[name="_token"][value*="${itemId}"]`)?.value
+                            || '{{ csrf_token("delete") }}';
+
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/inventory/${inventoryId}/item/${itemId}/delete`;
+
+                        const csrf = document.createElement('input');
+                        csrf.type = 'hidden';
+                        csrf.name = '_token';
+                        csrf.value = csrfToken;
+
+                        form.appendChild(csrf);
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        </script>
 {% endblock %}
