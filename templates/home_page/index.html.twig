@@ -32,26 +32,45 @@
         </div>
     </nav>
 
-<div class="container py-5">
-    <div class="row justify-content-center align-items-center">
-        <div class="col-md-8 col-lg-6">
-         <div class="card-shadow">
-             <div class="card-body">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Левый блок - Latest Inventories -->
+            <div class="col-md-8">
+                <div class="card-shadow">
+                    <div class="card-body">
+                        <h3 class="text-center mt-4">Latest Inventories</h3>
 
-    <h3 class="text-center mt-4">LatestInventories</h3>
-      {% for inventory in latestInventories %}
-       <div class="card mb-2">
-           <div class="card-body">
-               <h5>{{ inventory.title }}</h5>
-               <small class="text-muted"?>
-                   Updated: {{ inventory.updatedAt|date('Y-m-d H:i') }}
-               </small>
-           </div>
-       </div>
-    {% endfor %}
-             </div>
-           </div>
+                        {% for inventory in latestInventories %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5>{{ inventory.title }}</h5>
+                                    <p>{{ inventory.description|default('No description') }}</p>
+                                    <small class="text-muted">
+                                        Created by: {{ inventory.owner.username }}
+                                    </small>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правый блок - Popular Inventories -->
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <h4>Most Popular</h4>
+
+                    {% for inventory in popularInventories %}
+                        <div class="card mb-2">
+                            <h5>{{ inventory['itemsCount'] }} items</h5>
+                            <p>{{ inventory[0].title }}</p>
+                            <p>{{ inventory[0].description|default('No description') }}</p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

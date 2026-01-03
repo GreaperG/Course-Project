@@ -22,13 +22,26 @@ final class HomePageController extends AbstractController
 
         $latestInventories = $entityManager->getRepository(Inventory::class)
             ->createQueryBuilder('i')
+            ->leftJoin('i.owner', 'u')
+            ->addSelect('u')
             ->orderBy('i.createdAt', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
 
+        $popularInventories = $entityManager->getRepository(Inventory::class)
+            ->createQueryBuilder('i')
+            ->leftJoin('i.items', 'it')
+            ->addSelect('COUNT(it.id) AS itemsCount')
+            ->groupBy('i.id')
+            ->orderBy('itemsCount', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home_page/index.html.twig', [
             'latestInventories' => $latestInventories,
+            'popularInventories' => $popularInventories,
         ]);
     }
     #[Route('/home/userPage', name: 'app_home_userPage')]

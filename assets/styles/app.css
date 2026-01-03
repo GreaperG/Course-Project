@@ -218,3 +218,22 @@ body {
     box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
     color: white;
 }
+
+.sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 7px solid #007bff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    width: 300px;
+
+}
+
+.sidebar h4 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}

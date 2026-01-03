@@ -47,9 +47,17 @@ class Inventory
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[ORM\OneToMany(
+        targetEntity: InventoryAttribute::class,
+        mappedBy: 'inventory',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $inventoryAttributes;
 
     public function __construct()
     {
+        $this->inventoryAttributes = new ArrayCollection();
         $this->isPublic = false;
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
@@ -188,4 +196,28 @@ class Inventory
     }
 
 
+    public function getInventoryAttributes(): Collection
+    {
+        return $this->inventoryAttributes;
+    }
+
+    public function addInventoryAttribute(InventoryAttribute $inventoryAttribute): static
+    {
+        if (!$this->inventoryAttributes->contains($inventoryAttribute)) {
+            $this->inventoryAttributes->add($inventoryAttribute);
+            $inventoryAttribute->setInventory($this);
+        }
+        return $this;
+    }
+
+    public function removeInventoryAttribute(InventoryAttribute $inventoryAttribute): static
+    {
+        if ($this->inventoryAttributes->removeElement($inventoryAttribute)) {
+            // set the owning side to null (unless already changed)
+            if ($inventoryAttribute->getInventory() === $this) {
+                $inventoryAttribute->setInventory(null);
+            }
+        }
+        return $this;
+    }
 }

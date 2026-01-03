@@ -62,7 +62,16 @@ final class InventoryVoter extends Voter
         }
         public function canEdit(Inventory $inventory, User $user): bool
         {
-            return true;
+            if($inventory->getOwner() !== $user){
+                return true;
+            }
+
+
+       if ($inventory->isPublic()){
+             return true;
+        }
+
+          return false;
         }
 
         private function canDelete(Inventory $inventory, User $user): bool
