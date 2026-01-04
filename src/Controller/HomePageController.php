@@ -5,14 +5,16 @@ namespace App\Controller;
 use App\Entity\Inventory;
 use App\Repository\InventoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomePageController extends AbstractController
 {
     #[Route('/home/page', name: 'app_home_page')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request,EntityManagerInterface $entityManager,PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
@@ -20,14 +22,18 @@ final class HomePageController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $latestInventories = $entityManager->getRepository(Inventory::class)
+        $latestQuery = $entityManager->getRepository(Inventory::class)
             ->createQueryBuilder('i')
             ->leftJoin('i.owner', 'u')
             ->addSelect('u')
             ->orderBy('i.createdAt', 'DESC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        $latestPagination = $paginator->paginate(
+            $latestQuery,
+            $request->query->getInt('page', 1),
+            10
+        );
 
         $popularInventories = $entityManager->getRepository(Inventory::class)
             ->createQueryBuilder('i')
@@ -39,8 +45,9 @@ final class HomePageController extends AbstractController
             ->getQuery()
             ->getResult();
 
+
         return $this->render('home_page/index.html.twig', [
-            'latestInventories' => $latestInventories,
+            'latestPagination' => $latestPagination,
             'popularInventories' => $popularInventories,
         ]);
     }

@@ -40,7 +40,7 @@
                     <div class="card-body">
                         <h3 class="text-center mt-4">Latest Inventories</h3>
 
-                        {% for inventory in latestInventories %}
+                        {% for inventory in latestPagination %}
                             <div class="card mb-2">
                                 <div class="card-body">
                                     <h5>{{ inventory.title }}</h5>
@@ -51,12 +51,14 @@
                                 </div>
                             </div>
                         {% endfor %}
-
+                        <div class="navigation">
+                            {{ knp_pagination_render(latestPagination) }}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Правый блок - Popular Inventories -->
+
             <div class="col-md-4">
                 <div class="sidebar">
                     <h4>Most Popular</h4>

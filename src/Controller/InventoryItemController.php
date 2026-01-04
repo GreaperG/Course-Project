@@ -5,15 +5,19 @@ namespace App\Controller;
 use App\Entity\Inventory;
 use App\Entity\Item;
 use App\Entity\ItemAttributeValue;
+use App\Enum\AttributeType;
 use App\Form\ItemType;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 
 
 final class InventoryItemController extends AbstractController
@@ -65,13 +69,17 @@ final class InventoryItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+          try{
             foreach($inventory->getInventoryAttributes() as $attribute) {
                 $fieldName = 'attr_' . $attribute->getId();
                 $value = $form->get($fieldName)->getData();
 
                 if($value === null || $value === '') {
                     continue;
+                }
+
+                if($attribute->getType() === AttributeType::BOOLEAN) {
+                    $value = $value ? '1' : '0';
                 }
 
                 $attrValue = new ItemAttributeValue();
@@ -85,10 +93,17 @@ final class InventoryItemController extends AbstractController
             $em->persist($item);
             $em->flush();
 
+            $this->addFlash('success', 'Item created.');
+
             return $this->redirectToRoute('app_inventory_items', [
                 'inventoryId' => $inventoryId,
-            ], Response::HTTP_SEE_OTHER);
-        }
+            ]);
+          } catch (OptimisticLockException $e) {
+              $this->addFlash('error', 'Inventory was modified by someone else.');
+              $em->refresh($inventory);
+          }
+    }
+
 
         return $this->render('inventory_item/create.html.twig', [
             'form' => $form->createView(),
@@ -100,10 +115,11 @@ final class InventoryItemController extends AbstractController
      public function edit(int $inventoryId,Item $item, Request $request, EntityManagerInterface $em): Response
     {
         $inventory = $item->getInventory();
-
         $this->denyAccessUnlessGranted('EDIT', $inventory);
 
+        $form = $this->createForm(ItemType::class, $item);
         $response = $this->handleItemForm($item, $request, $em);
+
         if($response){
             return $response;
         }
@@ -164,12 +180,47 @@ final class InventoryItemController extends AbstractController
         return $inventory;
     }
 
-    private function findItemOrThrow(int $id, EntityManagerInterface $em): Item
+
+    private function saveItemAttributeValues(Item $item, FormInterface $form, EntityManagerInterface $em): void
     {
-        $item = $em->getRepository(Item::class)->find($id);
-        if(!$item) {
-            throw $this->createNotFoundException();
+        $inventory = $item->getInventory();
+
+        foreach($inventory->getInventoryAttributes() as $attribute) {
+            $fieldName = 'attr_' . $attribute->getId();
+
+            if(!$form->has($fieldName)){
+                continue;
+            }
+
+            $newValue = $form->get($fieldName)->getData();
+
+            $existingAttrValue = null;
+            foreach($item->getItemAttributeValues() as $attrValue) {
+                if($attrValue->getAttribute()->getId() === $attribute->getId()) {
+                    $existingAttrValue = $attrValue;
+                    break;
+                }
+            }
+
+            if($newValue !== null && $newValue !== '') {
+                if($attribute->getType() === AttributeType::BOOLEAN) {
+                    $newValue = $newValue ? '1' : '0';
+                }
+
+                if ($existingAttrValue) {
+                    $existingAttrValue->setValue((string) $newValue);
+                } else {
+                    $attrValue = new ItemAttributeValue();
+                    $attrValue->setItem($item);
+                    $attrValue->setAttribute($attribute);
+                    $attrValue->setValue((string) $newValue);
+                    $em->persist($attrValue);
+                }
+            } else {
+                if ($existingAttrValue) {
+                    $em->remove($existingAttrValue);
+                }
+            }
         }
-        return $item;
     }
 }

@@ -6,6 +6,7 @@ use App\Entity\Inventory;
 use App\Form\InventoryType;
 use App\Repository\InventoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,19 +63,32 @@ final class InventoryController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_inventory_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Inventory $inventory, EntityManagerInterface $entityManager): Response
+    public function edit(int $id,Request $request, Inventory $inventory,InventoryRepository $repo,EntityManagerInterface $entityManager): Response
     {
+        $inventory = $repo->find($id);
+        if(!$inventory){
+            throw $this->createNotFoundException('Inventory not found');
+        }
+
+
         $this->denyAccessUnlessGranted('EDIT', $inventory);
 
         $form = $this->createForm(InventoryType::class, $inventory);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            try{
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_inventory_index', [], Response::HTTP_SEE_OTHER);
+                $this->addFlash('success', 'Inventory has been saved');
+                return $this->redirectToRoute('app_inventory_index', ['id' => $id]);
+
+            } catch (OptimisticLockException $e) {
+                $this->addFlash('error', 'Someone else modified this inventory. Please reload and try again.');
+
+                $entityManager->refresh($inventory);
         }
-
+}
 
 
         return $this->render('inventory/edit.html.twig', [
