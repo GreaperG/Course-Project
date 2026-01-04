@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,4 +41,13 @@ class ItemRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function getPaginatedQueryBuilderForInventory(int $inventoryId): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.inventory = :inventoryId')
+            ->setParameter('inventoryId', $inventoryId)
+            ->orderBy('i.createdAt', 'DESC');
+    }
 }

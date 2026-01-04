@@ -6,6 +6,7 @@ use App\Entity\Inventory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,6 +37,9 @@ class InventoryType extends AbstractType
                 'by_reference' => false,
                 'prototype' => true,
                 'prototype_name' => '__name__',
+            ])
+            ->add('version', HiddenType::class, [
+                'mapped' => true,
             ])
         ;
     }

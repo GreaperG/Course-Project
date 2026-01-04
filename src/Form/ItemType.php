@@ -6,6 +6,7 @@ use App\Entity\Item;
 use App\Enum\AttributeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,7 +27,11 @@ class ItemType extends AbstractType
                 'attr' => [
                     'placeholder' => 'e.g. LAPTOP-001'
                 ]
+            ])
+            ->add('version', HiddenType::class, [
+                'mapped' => true,
             ]);
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $item = $event->getData();
             $form = $event->getForm();

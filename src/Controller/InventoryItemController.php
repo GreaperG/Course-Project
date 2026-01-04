@@ -9,6 +9,7 @@ use App\Form\ItemType;
 use App\Repository\InventoryRepository;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,20 +19,34 @@ use Symfony\Component\Routing\Attribute\Route;
 final class InventoryItemController extends AbstractController
 {
     #[Route('/inventory/{inventoryId}/items', name: 'app_inventory_items', methods: ['GET'])]
-    public function index(int $inventoryId,ItemRepository $itemRepository,InventoryRepository $inventoryRepository,): Response
+    public function index(Request $request,int $inventoryId,ItemRepository $itemRepository,InventoryRepository $inventoryRepository,PaginatorInterface $paginator): Response
     {
 
         $inventory = $inventoryRepository->find($inventoryId);
-        if($inventory === null) {
+        if(!$inventory) {
             throw $this->createNotFoundException();
         }
 
-        $items = $itemRepository->findBy(['inventory' => $inventory]);
+        $query = $itemRepository->createQueryBuilder('i')
+            ->leftJoin('i.itemAttributeValues', 'av')
+            ->addSelect('av')
+            ->leftJoin('av.attribute', 'a')
+            ->addSelect('a')
+            ->where('i.inventory = :inventory')
+            ->setParameter('inventory', $inventory)
+            ->orderBy('i.createdAt', 'DESC')
+            ->getQuery();
+
+
+            $pagination = $paginator->paginate(
+                $query,
+                $request->query->getInt('page', 1),
+                20
+            );
 
         return $this->render('inventory_item/index.html.twig',[
             'inventory' => $inventory,
-            'items' => $items,
-
+            'pagination' => $pagination,
         ]);
     }
 
