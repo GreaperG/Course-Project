@@ -173,7 +173,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->createdAt = new \DateTime();
         $this->isBlocked = false;
-        $this->username = 'default_username';
         $this->inventories = new ArrayCollection();
     }
 

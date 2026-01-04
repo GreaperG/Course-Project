@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Inventory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,4 +41,11 @@ class InventoryRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
+    public function getPaginatedQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->orderBy('i.id', 'DESC');
+    }
 }

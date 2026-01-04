@@ -6,6 +6,7 @@ use App\Entity\Inventory;
 use App\Form\InventoryType;
 use App\Repository\InventoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class InventoryController extends AbstractController
 {
     #[Route(name: 'app_inventory_index', methods: ['GET'])]
-    public function index(InventoryRepository $inventoryRepository): Response
+    public function index(Request $request,InventoryRepository $inventoryRepository,PaginatorInterface $paginator): Response
     {
+        $query = $inventoryRepository->getPaginatedQueryBuilder()->getQuery();
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), /* page number */
+            10 /* limit per page */
+        );
+
         return $this->render('inventory/index.html.twig', [
-            'inventories' => $inventoryRepository->findAll(),
+            'pagination' => $pagination,
         ]);
     }
 

@@ -22,6 +22,10 @@ class RegistrationFormType extends AbstractType
             ->add('username', TextType::class, [
                 'required' => true,
                 'label' => 'Username',
+                'help' => 'Your unique identifier',
+                'attr' => [
+                    'placeholder' => 'default_username',
+                ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,

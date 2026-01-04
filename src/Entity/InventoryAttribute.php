@@ -24,7 +24,10 @@ class InventoryAttribute
     private ?bool $required = null;
 
     #[ORM\ManyToOne(inversedBy: 'inventoryAttributes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(
+        nullable: false,
+        onDelete: 'CASCADE'
+    )]
     private ?Inventory $inventory = null;
 
     public function getId(): ?int

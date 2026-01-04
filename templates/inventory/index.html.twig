@@ -31,7 +31,7 @@
 
 
     <div class="container mt-5">
-    <h2>Inventories</h2>
+    <h2>All Inventories</h2>
 
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
@@ -43,7 +43,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for inventory in inventories %}
+        {% for inventory in pagination %}
             <tr>
                 <td>
                     <input type="checkbox"
@@ -57,12 +57,7 @@
                 <td class="fw-semibold">{{ inventory.category }}</td>
                 <td style="max-width: 300px;">
                     <div class="d-flex flex-warp gap-1" style="max-height: 100px; overflow-y: auto;">
-                    {% for item in inventory.items %}
-                        <span class="badge bg-secondary">{{ item.customId }}</span>
-                            {% if not loop.last %}, {% endif %}
-                    {% else %}
-                        <span class="badge bg-light text-dark border">No items</span>
-                    {% endfor %}
+                        <span class="badge bg-secondary">{{ inventory.items|length }}</span>
                     </div>
             </tr>
         {% else %}
@@ -73,26 +68,40 @@
         </tbody>
     </table>
 
-        <div class="btn-toolbar" role="toolbar">
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+        <div class="btn-toolbar mb-3" role="toolbar">
             <div class="btn-group me-2" role="group">
-                <a href="{{ path('app_inventory_new') }}" class="btn btn-primary">
+                <a href="{{ path('app_inventory_new') }}" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus"></i> Create New
                 </a>
             </div>
 
-            <button type="button"
+            <div class="btn-group me-2" role="group">
+                <button type="button"
+                        id="addItemBtn"
+                        class="btn btn-primary btn-sm"
+                        disabled>
+                    <i class="fas fa-plus"></i> Add Item to Selected
+                </button>
+
+                <div class="btn-group me-2" role="group">
+                <button type="button"
                     id="editSelectedBtn"
-                    class="btn btn-outline-secondary"
+                    class="btn btn-outline-secondary btn-sm"
                     disabled>
                 <i class="fas fa-edit"></i> Edit Selected
             </button>
 
             <button type="button"
                     id="deleteSelectedBtn"
-                    class="btn btn-outline-danger"
+                    class="btn btn-outline-danger btn-sm"
                     disabled>
                 <i class="fas fa-trash"></i>Delete Selected
             </button>
+                </div>
 
 
     <script>
@@ -129,6 +138,31 @@
                     });
                 });
             </script>
+
+<script>
+    document.getElementById('addItemBtn').addEventListener('click', function() {
+        const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
+
+        if (selected) {
+            const inventoryId = parseInt(selected.value);
+            window.location.href = `/inventory/${inventoryId}/createItem`;
+            // Или с использованием path():
+            // window.location.href = Routing.generate('app_inventory_item_create', {inventoryId: inventoryId});
+        }
+    });
+
+    // Включаем/выключаем кнопки при выборе чекбокса
+    document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
+            document.getElementById('addItemBtn').disabled = !hasSelection;
+            document.getElementById('editSelectedBtn').disabled = !hasSelection;
+            document.getElementById('deleteSelectedBtn').disabled = !hasSelection;
+        });
+    });
+</script>
+
+
 
 
 {% endblock %}

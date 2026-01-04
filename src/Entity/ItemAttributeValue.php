@@ -16,7 +16,10 @@ class ItemAttributeValue
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'itemAttributeValues')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(
+        nullable: false,
+        onDelete: 'CASCADE'
+    )]
     private ?item $item = null;
 
     #[ORM\ManyToOne]
