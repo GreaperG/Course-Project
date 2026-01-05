@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href={{ path('app_inventory_index') }}>Inventory's</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ path('app_home_page') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{path('app_home_userPage')}}">User profile</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+<div class="container mt-4">
+    <h1>Search Results for "{{ query }}"</h1>
+
+    {% if query == '' %}
+      <div class="alert alert-info">
+          Enter a search query to find inventories and items.
+      </div>
+    {% else %}
+<div class="container mt-5">
+       <div class="mb-5">
+           <h2>Inventories ({{ inventories|length }})</h2>
+
+           {% if inventories|length > 0 %}
+           <table class="table table-striped">
+               <thead>
+               <tr>
+                   <th><input type="checkbox" id="select-all-inventorys"></th>
+                   <th>Title</th>
+                   <th>Category</th>
+                   <th>Owner</th>
+               </tr>
+               </thead>
+               <tbody>
+               {% for inventory in inventories %}
+                    <tr>
+                        <td>
+                            <input type="checkbox"
+                                   name="inventorys_ids[]"
+                                   value="{{ inventory.id }}"
+                                   data-csrf="{{ csrf_token('delete' ~ inventory.id) }}">
+                        </td>
+                        <td> {{ inventory.title }}</td>
+                        <td><span class="badge bg-primary">{{ inventory.category }}</span></td>
+                        <td>{{ inventory.owner.username }}</td>
+                    </tr>
+               {% endfor %}
+               </tbody>
+           </table>
+           {% else %}
+           <p class="text-muted">No inventories found.</p>
+           {% endif %}
+       </div>
+
+       <div class="mb-5">
+           <h2>Items ({{ items|length }})</h2>
+
+           {% if items|length > 0 %}
+           <table class="table table-striped">
+               <thead>
+               <tr>
+                   <th><input type="checkbox" id="select-all-items"></th>
+                   <th>Custom Id</th>
+                   <th>Inventory</th>
+                   <th>CreatedBy</th>
+               </tr>
+               </thead>
+               <tbody>
+               {% for item in items %}
+                   <tr>
+                       <td>
+                           <input type="checkbox"
+                                  name="items_ids[]"
+                                  value="{{ item.id }}"
+                                  data-inventory-id="{{ item.inventory.id }}"
+                                  data-csrf="{{ csrf_token('delete' ~ item.id) }}">
+                       </td>
+                       <td>{{ item.customId }}</td>
+                       <td>{{ item.inventory.title }}</td>
+                       <td>{{ item.createdBy.username }}</td>
+                   </tr>
+               {% endfor %}
+               </tbody>
+           </table>
+
+               <div class="btn-group me-2" role="group">
+                   <button type="button"
+                           id="viewItemSelectedBtn"
+                           class="btn btn-outline-secondary btn-sm"
+                           disabled>
+                       <i class="fas fa-edit"></i> Show Item
+                   </button>
+
+                   <button type="button"
+                           id="viewInventorySelectedBtn"
+                           class="btn btn-outline-secondary btn-sm"
+                           disabled>
+                       <i class="fas fa-edit"></i>Show Inventory
+                   </button>
+               </div>
+
+           {% else %}
+               <p class="text-muted">No items found.</p>
+           {% endif %}
+       </div>
+    {% endif %}
+  </div>
+</div>
+
+
+
+
+    <script>
+        document.getElementById('select-all-items').addEventListener('change', function() {
+            document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
+        });
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function(el) {
+            return new bootstrap.Tooltip(el)
+        });
+    </script>
+
+    <script>
+        document.getElementById('select-all-inventorys').addEventListener('change', function() {
+            document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
+        });
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function(el) {
+            return new bootstrap.Tooltip(el)
+        });
+    </script>
+
+    <script>
+
+        document.getElementById('viewInventorySelectedBtn').addEventListener('click', function() {
+            const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
+
+            if (selected) {
+                // Берём ID первого выбранного
+                const id = selected.value;
+                // Переходим на edit
+                window.location.href = '/inventory/' + id;
+            } else {
+                alert('Select an inventory first!');
+            }
+        });
+
+        // 3. Включаем кнопку при выборе checkbox
+        document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
+                document.getElementById('viewInventorySelectedBtn').disabled = !hasSelection;
+            });
+        });
+    </script>
+
+    <script>
+
+        document.getElementById('viewItemSelectedBtn').addEventListener('click', function() {
+            const selected = document.querySelector('input[name="items_ids[]"]:checked');
+
+            if (selected) {
+                // Берём ID первого выбранного
+                const inventoryId = selected.dataset.inventoryId;
+                // Переходим на edit
+                window.location.href = '/inventory/' + inventoryId + '/items';
+            } else {
+                alert('Select an items first!');
+            }
+        });
+
+        // 3. Включаем кнопку при выборе checkbox
+        document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                const hasSelection = document.querySelectorAll('input[name="items_ids[]"]:checked').length > 0;
+                document.getElementById('viewItemSelectedBtn').disabled = !hasSelection;
+            });
+        });
+    </script>
+
+{% endblock %}
+
+{#
+<td>
+    <a href="{{ path('app_inventory_show', {'id': inventory.id}) }}"
+       class="btn btn-sm btn-info">View</a>
+</td> #}
+
+{#                     <td>
+                           <a href="{{ path('app_inventory_items', {'inventoryId': item.inventory.id}) }}"
+                              class="btn btn-sm btn-info">View Inventory</a>
+                       </td> #}
+

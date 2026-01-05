@@ -48,4 +48,16 @@ class InventoryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('i')
             ->orderBy('i.id', 'DESC');
     }
+
+    public function search(string $query): array
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.title LIKE :query')
+            ->orWhere('i.description LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('i.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }

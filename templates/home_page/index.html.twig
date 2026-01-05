@@ -22,11 +22,18 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{path('app_home_userPage')}}">User profile</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('admin') }}">Admin Panel</a>
+                    </li>
                 </ul>
 
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                <form action="{{ path('app_search') }}" method="get" class="d-flex">
+                    <input class="form-control me-2"
+                           type="search"
+                           name="q"
+                           placeholder="Search..."
+                           value="{{ app.request.query.get('q') }}">
+                    <button class="btn btn-outline-light" type="submit">Search</button>
                 </form>
             </div>
         </div>
@@ -34,7 +41,6 @@
 
     <div class="container py-5">
         <div class="row">
-            <!-- Левый блок - Latest Inventories -->
             <div class="col-md-8">
                 <div class="card-shadow">
                     <div class="card-body">

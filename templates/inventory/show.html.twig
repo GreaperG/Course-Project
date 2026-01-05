@@ -3,10 +3,11 @@
 {% block title %}Inventory{% endblock %}
 
 {% block body %}
-    <h1>Inventory</h1>
-<div class="container">
+
+<div class="container mt-5">
   <div class="row justify-content-center">
       <div class="col-md-16 col-lg-12">
+          <h1>Inventory "{{ inventory.title }}"</h1>
     <table class="table table-striped table-hover table-bordered">
         <tbody>
             <tr>
@@ -16,6 +17,10 @@
             <tr>
                 <th>items</th>
                 <td>{{ inventory.items|length }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ inventory.owner.username }}</td>
             </tr>
         <tr>
             <th>UpdatedAt</th>

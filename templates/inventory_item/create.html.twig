@@ -3,6 +3,16 @@
 {% block title %}Create Item for Inventory {% endblock %}
 
 {% block body %}
+    <form action="{{ path('app_search') }}" method="get" class="d-flex">
+        <input class="form-control me-2"
+               type="search"
+               name="q"
+               placeholder="Search..."
+               value="{{ app.request.query.get('q') }}">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+    </form>
+
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">

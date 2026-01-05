@@ -50,4 +50,17 @@ class ItemRepository extends ServiceEntityRepository
             ->setParameter('inventoryId', $inventoryId)
             ->orderBy('i.createdAt', 'DESC');
     }
+
+    public function search(string $query): array
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.inventory', 'inv')
+            ->where('i.customId LIKE :query')
+            ->orWhere('inv.title LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('i.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }
