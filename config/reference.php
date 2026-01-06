@@ -1494,6 +1494,15 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     convert_exception?: bool, // Default: false
  *     remove_first_page_param?: bool, // Default: false
  * }
+ * @psalm-type KnpuOauth2ClientConfig = array{
+ *     http_client?: scalar|null, // Service id of HTTP client to use (must implement GuzzleHttp\ClientInterface) // Default: null
+ *     http_client_options?: array{
+ *         timeout?: int,
+ *         proxy?: scalar|null,
+ *         verify?: bool, // Use only with proxy option set
+ *     },
+ *     clients?: array<string, array<string, mixed>>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1510,6 +1519,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     webpack_encore?: WebpackEncoreConfig,
  *     twig_component?: TwigComponentConfig,
  *     knp_paginator?: KnpPaginatorConfig,
+ *     knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1529,6 +1539,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         webpack_encore?: WebpackEncoreConfig,
  *         twig_component?: TwigComponentConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1546,6 +1557,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         webpack_encore?: WebpackEncoreConfig,
  *         twig_component?: TwigComponentConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1564,6 +1576,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         webpack_encore?: WebpackEncoreConfig,
  *         twig_component?: TwigComponentConfig,
  *         knp_paginator?: KnpPaginatorConfig,
+ *         knpu_oauth2_client?: KnpuOauth2ClientConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

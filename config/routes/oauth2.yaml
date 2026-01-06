@@ -1,0 +1,13 @@
+# Маршрут начала OAuth (перенаправление на GitHub)
+#connect_github_start:
+#    path: /connect/github
+#       controller: KnpU\OAuth2ClientBundle\Controller\ClientController::connectAction
+#        defaults:
+#            client: github
+#
+  # Маршрут обработки callback от GitHub
+ #   connect_github_check:
+  #      path: /connect/github/check
+   #     controller: KnpU\OAuth2ClientBundle\Controller\ClientController::connectCheckAction
+    #    defaults:
+     #       client: github

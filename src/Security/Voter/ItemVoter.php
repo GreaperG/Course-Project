@@ -24,7 +24,7 @@ final class ItemVoter extends Voter
     {
         $user = $token->getUser();
 
-        // if the user is anonymous, do not grant access
+
         if (!$user instanceof User) {
             return $attribute === self::VIEW;
         }
@@ -64,7 +64,9 @@ final class ItemVoter extends Voter
 
     private function canView(Item $item, User $user): bool
     {
-        return true;
+        $inventory = $item->getInventory();
+        return $inventory->getOwner() === $user
+        || $inventory->isPublic();
     }
 
     private function canDelete(Item $item,Inventory $inventory,User $user): bool

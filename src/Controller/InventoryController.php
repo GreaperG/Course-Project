@@ -57,6 +57,7 @@ final class InventoryController extends AbstractController
     #[Route('/{id}', name: 'app_inventory_show', methods: ['GET'])]
     public function show(Inventory $inventory): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $inventory);
         return $this->render('inventory/show.html.twig', [
             'inventory' => $inventory,
         ]);
@@ -69,7 +70,6 @@ final class InventoryController extends AbstractController
         if(!$inventory){
             throw $this->createNotFoundException('Inventory not found');
         }
-
 
         $this->denyAccessUnlessGranted('EDIT', $inventory);
 

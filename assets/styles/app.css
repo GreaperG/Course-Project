@@ -1,7 +1,104 @@
 body {
     background-color: #FFFFFF;
 }
-/* assets/styles/app.css - добавь эти стили */
+
+:root {
+    --background-color-light: #ffffff;
+    --text-color-light: #000000;
+    --background-color-dark: #121212;
+    --text-color-dark: #ffffff;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Navbar fix */
+.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+}
+
+.dark-mode .nav-link {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .navbar-brand {
+    color: #e0e0e0 !important;
+}
+
+/* Tables fix */
+.dark-mode .table {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #252525;
+}
+
+.dark-mode .card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .card * {
+    color: #fff !important;
+}
+
+.dark-mode .form-control {
+    color: #252525 !important;
+}
+
+.dark-mode .form-control::placeholder {
+    color: #888;
+}
+
+.dark-mode .text-muted {
+    opacity: 0.8;
+}
+
+.dark-mode .alert-info {
+    background-color: #0c5460;
+    border-color: #1b6d85;
+    color: #d1ecf1;
+}
+
+.dark-mode .alert-info .alert-link {
+    color: #a6e3ff;
+}
+
+.dark-mode .sidebar,
+.dark-mode .simple-sidebar
+{
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+.dark-mode .sidebar-block
+{
+    background-color: #252525;
+}
+.dark-mode .inventory-title,
+.dark-mode .inventory-category,
+.dark-mode .inventory-description,
+.dark-mode .container h1,
+.dark-mode .container h3,
+.dark-mode .sidebar-title
+{
+    color: #fff;
+}
+
+.dark-mode .inventory-item {
+    background-color: #2a2a2a;
+    border-color: #333;
+}
+.dark-mode .inventory-item:hover {
+    background: #2a2a2a;
+    border-color: #007bff;
+    transform: translateX(5px);
+}
+
 
 .form-control-limited {
     max-width: 500px;
@@ -17,11 +114,13 @@ body {
     background: #f5f5f5;
     border-right: 1px solid #ddd;
     padding: 20px;
-    position: fixed;
+    margin-top: 60px;
+    position: relative;
     left: 0;
     top: 0;
     height: 100vh;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .sidebar-block {
@@ -35,7 +134,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* Список инвентарей */
 .inventory-list {
     display: flex;
     flex-direction: column;

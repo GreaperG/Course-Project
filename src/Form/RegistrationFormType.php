@@ -52,7 +52,12 @@ class RegistrationFormType extends AbstractType
                     ),
                 ],
             ])
-        ;
+        ->add('registerAsAdmin', CheckboxType::class, [
+            'mapped' => false,
+            'required' => false,
+            'label' => 'Register as an admin',
+            'help' => 'You will become an admin',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

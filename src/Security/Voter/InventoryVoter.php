@@ -38,7 +38,7 @@ final class InventoryVoter extends Voter
 
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
-            return false;
+            return $attribute === self::VIEW;
         }
 
 
@@ -62,7 +62,7 @@ final class InventoryVoter extends Voter
         }
         public function canEdit(Inventory $inventory, User $user): bool
         {
-            return $inventory->getOwner() === $user;
+            return $inventory->getOwner() === $user || $inventory->isPublic();
         }
 
         private function canDelete(Inventory $inventory, User $user): bool

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% set hide_navbar = true %}
+
 {% block title %}Register{% endblock %}
 
 {% block body %}
@@ -30,9 +32,16 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
+         <div class="mb-3">
+             {{ form_row(registrationForm.registerAsAdmin) }}
+         </div>
+
         <button type="submit" class="btn btn-primary">Register</button>
     {{ form_end(registrationForm) }}
 
+                    <a href="{{ path('connect_github_start') }}" class="btn btn-dark">
+                        <i class="fab fa-github"></i> Login with GitHub
+                    </a>
 
                     <div class="text-center">
                         <a href="{{ path('app_login') }}" class="text-decoration-none text-muted small">
