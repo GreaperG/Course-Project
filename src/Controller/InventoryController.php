@@ -131,12 +131,17 @@ final class InventoryController extends AbstractController
         return $this->redirectToRoute('app_inventory_show', ['id' => $inventory->getId()]);
     }
 
-    #[Route('/inventory/{id}/revoke', name: 'app_inventory_revoke', methods: ['POST'])]
-    public function revoke(Inventory $inventory, int $userId, AccessManager $accessManager)
+    #[Route('/inventory/{id}/revoke/{userId}', name: 'app_inventory_revoke', methods: ['POST'])]
+    public function revoke(Inventory $inventory, int $userId, AccessManager $accessManager, EntityManagerInterface $em): Response
     {
         $this->denyAccessUnlessGranted('MANAGE_ACCESS', $inventory);
 
-        $user = $this->getDoctrine()->gerRepository(User::class)->find($userId);
+        $user = $em->getRepository(User::class)->find($userId);
+        if(!$user){
+            $this->addFlash('error', 'User not found');
+            return $this->redirectToRoute('app_inventory_show', ['id' => $inventory->getId()]);
+        }
+
         $accessManager->revokeAccess($inventory, $user);
 
         $this->addFlash('success', 'Access revoked');
