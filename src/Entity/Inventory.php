@@ -55,6 +55,12 @@ class Inventory
     )]
     private Collection $inventoryAttributes;
 
+    /**
+     * @var Collection<int, InventoryAccess>
+     */
+    #[ORM\OneToMany(targetEntity: InventoryAccess::class, mappedBy: 'inventory', cascade: ['persist', 'remove'],)]
+    private Collection $inventoryAccesses;
+
     public function __construct()
     {
         $this->inventoryAttributes = new ArrayCollection();
@@ -62,6 +68,7 @@ class Inventory
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->items = new ArrayCollection();
+        $this->inventoryAccesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,6 +225,36 @@ class Inventory
                 $inventoryAttribute->setInventory(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InventoryAccess>
+     */
+    public function getInventoryAccesses(): Collection
+    {
+        return $this->inventoryAccesses;
+    }
+
+    public function addInventoryAccesses(InventoryAccess $inventoryAccesses): static
+    {
+        if (!$this->inventoryAccesses->contains($inventoryAccesses)) {
+            $this->inventoryAccesses->add($inventoryAccesses);
+            $inventoryAccesses->setInventory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInventoryAccesses(InventoryAccess $inventoryAccesses): static
+    {
+        if ($this->inventoryAccesses->removeElement($inventoryAccesses)) {
+            // set the owning side to null (unless already changed)
+            if ($inventoryAccesses->getInventory() === $this) {
+                $inventoryAccesses->setInventory(null);
+            }
+        }
+
         return $this;
     }
 }

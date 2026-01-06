@@ -22,8 +22,9 @@ class ItemType extends AbstractType
     {
         $builder
             ->add('customId', TextType::class, [
+                'required' => false,
                 'label' => 'Custom ID',
-                'help' => 'Unique identifier for this item',
+                'help' => 'Unique identifier,leave empty for auto-generation',
                 'attr' => [
                     'placeholder' => 'e.g. LAPTOP-001'
                 ]

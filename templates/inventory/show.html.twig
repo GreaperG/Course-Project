@@ -41,6 +41,22 @@
         <i class="fas fa-arrow-left"></i>Edit Inventory
     </a>
 
+          {% if is_granted('MANAGE_ACCESS', inventory) %}
+              <h4>Share with user:</h4>
+              <form method="post" action="{{ path('app_inventory_share', {'id': inventory.id}) }}" class="mb-3">
+                  <input type="hidden" name="token" value="{{ csrf_token('share') }}">
+
+                  <div class="input-group">
+                      <input type="text" name="username" class="form-control" placeholder="username" required>
+                      <select name="permission" class="form-select">
+                          <option value="view">Can view</option>
+                          <option value="edit">Can edit</option>
+                      </select>
+                      <button type="submit" class="btn btn-primary">Share</button>
+                  </div>
+              </form>
+          {% endif %}
+
           <form method="post" action="{{ path('app_inventory_delete', {'id': inventory.id}) }}"
                 onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
               <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ inventory.id) }}">

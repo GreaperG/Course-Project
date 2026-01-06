@@ -83,7 +83,7 @@ final class InventoryItemController extends AbstractController
                 }
 
                 if(empty($item->getCustomId())){
-                    $item->setCustomId($this->generateUniqueId);
+                    $item->setCustomId($this->generateUniqueId());
                 }
                 $attrValue = new ItemAttributeValue();
                 $attrValue->setAttribute($attribute);
@@ -183,47 +183,8 @@ final class InventoryItemController extends AbstractController
         return $inventory;
     }
 
-
-    private function saveItemAttributeValues(Item $item, FormInterface $form, EntityManagerInterface $em): void
+    public function generateUniqueId(): string
     {
-        $inventory = $item->getInventory();
-
-        foreach($inventory->getInventoryAttributes() as $attribute) {
-            $fieldName = 'attr_' . $attribute->getId();
-
-            if(!$form->has($fieldName)){
-                continue;
-            }
-
-            $newValue = $form->get($fieldName)->getData();
-
-            $existingAttrValue = null;
-            foreach($item->getItemAttributeValues() as $attrValue) {
-                if($attrValue->getAttribute()->getId() === $attribute->getId()) {
-                    $existingAttrValue = $attrValue;
-                    break;
-                }
-            }
-
-            if($newValue !== null && $newValue !== '') {
-                if($attribute->getType() === AttributeType::BOOLEAN) {
-                    $newValue = $newValue ? '1' : '0';
-                }
-
-                if ($existingAttrValue) {
-                    $existingAttrValue->setValue((string) $newValue);
-                } else {
-                    $attrValue = new ItemAttributeValue();
-                    $attrValue->setItem($item);
-                    $attrValue->setAttribute($attribute);
-                    $attrValue->setValue((string) $newValue);
-                    $em->persist($attrValue);
-                }
-            } else {
-                if ($existingAttrValue) {
-                    $em->remove($existingAttrValue);
-                }
-            }
-        }
+        return bin2hex(random_bytes(8));
     }
 }

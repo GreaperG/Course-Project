@@ -51,6 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Inventory::class, mappedBy: 'owner')]
     private Collection $inventories;
 
+    /**
+     * @var Collection<int, InventoryAccess>
+     */
+    #[ORM\OneToMany(targetEntity: InventoryAccess::class, mappedBy: 'user')]
+    private Collection $inventoryAccesses;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -174,6 +180,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTime();
         $this->isBlocked = false;
         $this->inventories = new ArrayCollection();
+        $this->inventoryAccesses = new ArrayCollection();
     }
 
     /**
@@ -200,6 +207,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($inventory->getOwner() === $this) {
                 $inventory->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InventoryAccess>
+     */
+    public function getInventoryAccesses(): Collection
+    {
+        return $this->inventoryAccesses;
+    }
+
+    public function addInventoryAccess(InventoryAccess $inventoryAccess): static
+    {
+        if (!$this->inventoryAccesses->contains($inventoryAccess)) {
+            $this->inventoryAccesses->add($inventoryAccess);
+            $inventoryAccess->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInventoryAccess(InventoryAccess $inventoryAccess): static
+    {
+        if ($this->inventoryAccesses->removeElement($inventoryAccess)) {
+            // set the owning side to null (unless already changed)
+            if ($inventoryAccess->getUser() === $this) {
+                $inventoryAccess->setUser(null);
             }
         }
 

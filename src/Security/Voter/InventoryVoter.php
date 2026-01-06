@@ -3,7 +3,9 @@
 namespace App\Security\Voter;
 
 use App\Entity\Inventory;
+use App\Entity\InventoryAccess;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -16,6 +18,8 @@ final class InventoryVoter extends Voter
     public const DELETE = 'DELETE';
     public const VIEW = 'VIEW';
     public const MANAGE_ACCESS = 'MANAGE_ACCESS';
+
+    public function __construct(private EntityManagerInterface $em){}
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -42,7 +46,21 @@ final class InventoryVoter extends Voter
         }
 
 
+
         $inventory = $subject;
+
+        $access = $this->em->getRepository(InventoryAccess::class)
+            ->findOneBy(['inventory' => $inventory, 'user' => $user]);
+
+        if($access) {
+            return match($attribute) {
+                self::VIEW => true,
+                self::EDIT => in_array($access->getPermission(),['edit', 'admin']),
+                self::DELETE => $access->getPermission() === 'admin',
+                self::MANAGE_ACCESS => false,
+                default => false,
+            };
+        }
 
         if (in_array('ROLE_ADMIN', $user->getRoles())){
             return true;

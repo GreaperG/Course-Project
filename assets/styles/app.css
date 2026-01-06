@@ -68,6 +68,7 @@ body {
     color: #a6e3ff;
 }
 
+.dark-mode .btn.btn-outline-dark,
 .dark-mode .sidebar,
 .dark-mode .simple-sidebar
 {
