@@ -8,6 +8,8 @@ console.log('app.js loaded');
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.css';
 import 'bootstrap';
+import './inventory-index.js';
+import './item-index.js';
 
 document
     .querySelectorAll('.add_item_link')
