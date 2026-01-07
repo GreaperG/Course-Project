@@ -86,3 +86,7 @@ document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
         document.getElementById('deleteSelectedBtn').disabled = !hasSelection;
     });
 });
+
+
+
+

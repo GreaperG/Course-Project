@@ -1,4 +1,9 @@
 {% extends 'base.html.twig' %}
+g
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/item-index.js') }}"></script>
+{% endblock %}
 
 {% block title %} Items - {{ inventory.title }} {% endblock %}
 
@@ -94,55 +99,6 @@
                 </button>
     </div>
 </div>
-        <script>
-            document.getElementById('select-all-items-index').addEventListener('change', function() {
-                document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
-            });
-
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            tooltipTriggerList.map(function(el) {
-                return new bootstrap.Tooltip(el)
-            });
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const deleteBtn = document.getElementById('deleteSelectedBtn');
-
-                document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => {
-                    cb.addEventListener('change', function() {
-                        const hasSelection = document.querySelectorAll('input[name="items_ids[]"]:checked').length > 0;
-                        deleteBtn.disabled = !hasSelection;
-                    });
-                });
-
-
-                deleteBtn.addEventListener('click', function() {
-                    const selected = document.querySelector('input[name="items_ids[]"]:checked');
-
-                    if (selected && confirm('Delete selected item?')) {
-                        const itemId = selected.value;
-                        const inventoryId = {{ inventory.id }};
-
-
-                        const csrfToken = document.querySelector(`input[name="_token"][value*="${itemId}"]`)?.value
-                            || '{{ csrf_token("delete") }}';
-
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = `/inventory/${inventoryId}/item/${itemId}/delete`;
-
-                        const csrf = document.createElement('input');
-                        csrf.type = 'hidden';
-                        csrf.name = '_token';
-                        csrf.value = csrfToken;
-
-                        form.appendChild(csrf);
-                        document.body.appendChild(form);
-                        form.submit();
-                    }
-                });
-            });
-        </script>
     </div>
 </div>
 {% endblock %}

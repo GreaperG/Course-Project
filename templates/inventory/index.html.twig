@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+{{ parent() }}
+   <script src="{{ asset('js/inventory-index.js') }}"></script>
+{% endblock %}
+
 {% block title %}Inventories{% endblock %}
 
 {% block body %}
@@ -85,73 +90,6 @@
                 <i class="fas fa-trash"></i>Delete Selected
             </button>
                 </div>
-
-
-    <script>
-        document.getElementById('select-all-inventorys-index').addEventListener('change', function() {
-            document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
-        });
-
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        tooltipTriggerList.map(function(el) {
-            return new bootstrap.Tooltip(el)
-        });
-    </script>
-
-            <script>
-
-                document.getElementById('editSelectedBtn').addEventListener('click', function() {
-                    const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
-
-                    if (selected) {
-                        const id = selected.value;
-                        window.location.href = '/inventory/' + id + '/edit';
-                    } else {
-                        alert('Select an inventory first!');
-                    }
-                });
-
-                document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
-                    cb.addEventListener('change', function() {
-                        const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
-                        document.getElementById('editSelectedBtn').disabled = !hasSelection;
-                    });
-                });
-            </script>
-
-<script>
-    document.getElementById('addItemBtn').addEventListener('click', function() {
-        const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
-
-        if (selected) {
-            const inventoryId = parseInt(selected.value);
-            window.location.href = `/inventory/${inventoryId}/createItem`;
-        }
-    });
-
-    document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
-        cb.addEventListener('change', function() {
-            const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
-            document.getElementById('addItemBtn').disabled = !hasSelection;
-            document.getElementById('editSelectedBtn').disabled = !hasSelection;
-            document.getElementById('deleteSelectedBtn').disabled = !hasSelection;
-            document.getElementById('showInventoryBtn').disabled = !hasSelection;
-        });
-    });
-</script>
-                <script>
-                    document.getElementById('showInventoryBtn').addEventListener('click', function() {
-                        const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
-
-                        if (selected) {
-                            const inventoryId = selected.value;
-                            window.location.href = `/inventory/${inventoryId}`;
-                        } else {
-                            alert('Please select an inventory first!');
-                        }
-                    });
-                </script>
-
             </div>
         </div>
     </div>
