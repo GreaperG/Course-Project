@@ -34,7 +34,7 @@ final class InventoryItemController extends AbstractController
         $query = $itemRepository->createQueryBuilder('i')
             ->leftJoin('i.itemAttributeValues', 'av')
             ->addSelect('av')
-            ->leftJoin('av.inventoryAttribute', 'a')
+            ->leftJoin('av.attribute', 'a')
             ->addSelect('a')
             ->where('i.inventory = :inventory')
             ->setParameter('inventory', $inventory)
