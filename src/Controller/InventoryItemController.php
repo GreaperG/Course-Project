@@ -34,7 +34,7 @@ final class InventoryItemController extends AbstractController
         $query = $itemRepository->createQueryBuilder('i')
             ->leftJoin('i.itemAttributeValues', 'av')
             ->addSelect('av')
-            ->leftJoin('av.attribute', 'a')
+            ->leftJoin('av.inventoryAttribute', 'a')
             ->addSelect('a')
             ->where('i.inventory = :inventory')
             ->setParameter('inventory', $inventory)
@@ -69,6 +69,7 @@ final class InventoryItemController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             if(empty($item->getCustomId())){
                 $item->setCustomId($this->generateUniqueId());
             }
