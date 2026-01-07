@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Enum\AttributeType;
 use App\Repository\CustomFieldRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomFieldRepository::class)]
@@ -29,6 +31,22 @@ class InventoryAttribute
         onDelete: 'CASCADE'
     )]
     private ?Inventory $inventory = null;
+
+    /**
+     * @var Collection<int, ItemAttributeValue>
+     */
+    #[ORM\OneToMany(
+        targetEntity: ItemAttributeValue::class,
+        mappedBy: 'attribute',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $itemAttributeValues;
+
+    public function __construct()
+    {
+        $this->itemAttributeValues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,6 +95,36 @@ class InventoryAttribute
     public function setInventory(?Inventory $inventory): static
     {
         $this->inventory = $inventory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ItemAttributeValue>
+     */
+    public function getItemAttributeValues(): Collection
+    {
+        return $this->itemAttributeValues;
+    }
+
+    public function addItemAttributeValue(ItemAttributeValue $itemAttributeValue): static
+    {
+        if (!$this->itemAttributeValues->contains($itemAttributeValue)) {
+            $this->itemAttributeValues->add($itemAttributeValue);
+            $itemAttributeValue->setInventoryAttribute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemAttributeValue(ItemAttributeValue $itemAttributeValue): static
+    {
+        if ($this->itemAttributeValues->removeElement($itemAttributeValue)) {
+            // set the owning side to null (unless already changed)
+            if ($itemAttributeValue->getInventoryAttribute() === $this) {
+                $itemAttributeValue->setInventoryAttribute(null);
+            }
+        }
 
         return $this;
     }
