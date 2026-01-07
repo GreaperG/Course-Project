@@ -65,6 +65,10 @@ final class InventoryItemController extends AbstractController
         $item->setInventory($inventory);
         $item->setCreatedBy($this->getUser());
 
+        if(empty($item->getCustomId())){
+            $item->setCustomId($this->generateUniqueId());
+        }
+
         $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 
@@ -82,9 +86,6 @@ final class InventoryItemController extends AbstractController
                     $value = $value ? '1' : '0';
                 }
 
-                if(empty($item->getCustomId())){
-                    $item->setCustomId($this->generateUniqueId());
-                }
                 $attrValue = new ItemAttributeValue();
                 $attrValue->setAttribute($attribute);
                 $attrValue->setValue((string) $value);
