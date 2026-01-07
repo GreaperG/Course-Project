@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\AttributeType;
 use App\Repository\ItemAttributeValueRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,9 @@ class ItemAttributeValue
     )]
     private ?item $item = null;
 
+    #[ORM\ManyToOne(targetEntity: InventoryAttribute::class)]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'CASCADE')]
+    private ?InventoryAttribute $attribute = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
