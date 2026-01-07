@@ -22,9 +22,6 @@ class ItemAttributeValue
     )]
     private ?item $item = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?InventoryAttribute $attribute = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
@@ -50,17 +47,6 @@ class ItemAttributeValue
         return $this;
     }
 
-    public function getAttribute(): ?InventoryAttribute
-    {
-        return $this->attribute;
-    }
-
-    public function setAttribute(?InventoryAttribute $attribute): static
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
 
     public function getValue(): ?string
     {

@@ -37,7 +37,7 @@ class InventoryAttribute
      */
     #[ORM\OneToMany(
         targetEntity: ItemAttributeValue::class,
-        mappedBy: 'attribute',
+        mappedBy: 'inventoryAttribute',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
