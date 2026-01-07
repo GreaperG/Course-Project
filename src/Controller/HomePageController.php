@@ -60,9 +60,7 @@ final class HomePageController extends AbstractController
         }
 
         $inventories = $inventoryRepository->findBy(['owner' => $user]);
- //       if(empty($inventories)) {
-//            throw $this->createNotFoundException();
- //       }
+
         return $this->render('home_page/user.html.twig', [
             'user' => $user,
             'inventories' => $inventories,

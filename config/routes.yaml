@@ -11,3 +11,6 @@ controllers:
     resource: routing.controllers
 
 
+index:
+    path: /
+    controller: App\Controller\RegistrationController::register

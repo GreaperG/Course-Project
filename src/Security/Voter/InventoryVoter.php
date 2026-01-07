@@ -45,38 +45,46 @@ final class InventoryVoter extends Voter
             return $attribute === self::VIEW;
         }
 
-
-
         $inventory = $subject;
 
-        $access = $this->em->getRepository(InventoryAccess::class)
-            ->findOneBy(['inventory' => $inventory, 'user' => $user]);
-
-        if($access) {
-            return match($attribute) {
-                self::VIEW => true,
-                self::EDIT => in_array($access->getPermission(),['edit', 'admin']),
-                self::DELETE => $access->getPermission() === 'admin',
-                self::MANAGE_ACCESS => false,
-                default => false,
-            };
-        }
 
         if (in_array('ROLE_ADMIN', $user->getRoles())){
             return true;
         }
 
-        return match($attribute) {
-        self::VIEW => $this->canView($inventory, $user),
-        self::EDIT => $this->canEdit($inventory, $user),
-        self::DELETE => $this->canDelete($inventory, $user),
-        self::MANAGE_ACCESS => $this->canManageAccess($inventory, $user),
-        default => false,
+        $ownerResult = match($attribute) {
+            self::VIEW => $this->canView($inventory, $user),
+            self::EDIT => $this->canEdit($inventory, $user),
+            self::DELETE => $this->canDelete($inventory, $user),
+            self::MANAGE_ACCESS => $this->canManageAccess($inventory, $user),
+            default => false,
         };
+
+
+        if($ownerResult){
+            return true;
+        }
+
+
+        $access = $this->em->getRepository(InventoryAccess::class)
+            ->findOneBy(['inventory' => $inventory, 'user' => $user]);
+
+
+        if($access) {
+            return match($attribute) {
+              //  self::VIEW => true,
+                self::EDIT => in_array($access->getPermission(), ['edit', 'admin']),
+                self::DELETE => $access->getPermission() === 'admin',
+                self::MANAGE_ACCESS => false, // расшаренные юзеры не могут управлять доступом
+                default => false,
+            };
+        }
+
+        return false;
 }
         public function canView(Inventory $inventory, User $user): bool
         {
-            return $inventory->getOwner() === $user || $inventory->isPublic();
+            return true;
         }
         public function canEdit(Inventory $inventory, User $user): bool
         {

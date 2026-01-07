@@ -13,11 +13,11 @@ class InventoryAccess
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Inventory::class, inversedBy: 'accesses')]
+    #[ORM\ManyToOne(targetEntity: Inventory::class, inversedBy: 'inventoryAccesses')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Inventory $inventory = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'inventoryAccesses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

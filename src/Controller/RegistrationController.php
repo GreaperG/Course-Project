@@ -36,14 +36,11 @@ class RegistrationController extends AbstractController
                 $user->setRoles(['ROLE_USER']);
             }
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
             $security->login($user);
-
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_inventory_index');
         }

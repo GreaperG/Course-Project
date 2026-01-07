@@ -31,9 +31,11 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="{{path('app_home_userPage')}}">User profile</a>
                     </li>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ path('admin') }}">Admin Panel</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <button class="nav-link active" href="#" onclick="toggleDarkMode(); return false;">
                             <i class="fas fa-moon"></i>Dark Theme
