@@ -30,6 +30,10 @@ class ItemAttributeValue
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
+    #[ORM\ManyToOne(inversedBy: 'itemAttributeValues')]
+    #[ORM\JoinColumn(name: 'attribute_id',nullable: false, onDelete: 'CASCADE')]
+    private ?InventoryAttribute $inventoryAttribute = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,17 +51,6 @@ class ItemAttributeValue
         return $this;
     }
 
-    public function getAttribute(): ?InventoryAttribute
-    {
-        return $this->attribute;
-    }
-
-    public function setAttribute(?InventoryAttribute $attribute): static
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
 
     public function getValue(): ?string
     {
@@ -67,6 +60,18 @@ class ItemAttributeValue
     public function setValue(?string $value): static
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getInventoryAttribute(): ?InventoryAttribute
+    {
+        return $this->inventoryAttribute;
+    }
+
+    public function setInventoryAttribute(?InventoryAttribute $inventoryAttribute): static
+    {
+        $this->inventoryAttribute = $inventoryAttribute;
 
         return $this;
     }

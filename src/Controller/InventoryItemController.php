@@ -88,7 +88,7 @@ final class InventoryItemController extends AbstractController
                 }
 
                 $attrValue = new ItemAttributeValue();
-                $attrValue->setAttribute($attribute);
+                $attrValue->setInventoryAttribute($attribute);
                 $attrValue->setValue((string) $value);
 
                 $item->addItemAttributeValue($attrValue);
