@@ -37,7 +37,7 @@
                                 <td>
                                     {% set valueFound = false %}
                                     {% for attrValue in item.itemAttributeValues %}
-                                        {% if attrValue.getAttribute().getId() == attribute.id %}
+                                        {% if attrValue.getInventoryAttribute().getId() == attribute.id %}
                                             {% if attribute.type.value == 'bool' %}
                                                 {% if attrValue.value == '1' or attrValue.value == 'true' %}
                                                     <span class="badge bg-success">✓ Yes</span>
