@@ -14,7 +14,7 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead class="table-dark">
                     <tr>
-                        <th><input type="checkbox" id="select-all"></th>
+                        <th><input type="checkbox" id="select-all-items-index"></th>
                         <th>CustomId</th>
                         {% for attribute in inventory.inventoryAttributes %}
                            <th>{{ attribute.name }}</th>
@@ -95,7 +95,7 @@
     </div>
 </div>
         <script>
-            document.getElementById('select-all').addEventListener('change', function() {
+            document.getElementById('select-all-items-index').addEventListener('change', function() {
                 document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
             });
 

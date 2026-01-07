@@ -5,9 +5,6 @@
 {% block body %}
 
 
-
-
-
 <div class="container mt-4">
     <h1>Search Results for "{{ query }}"</h1>
 
@@ -24,7 +21,7 @@
            <table class="table table-striped">
                <thead>
                <tr>
-                   <th><input type="checkbox" id="select-all-inventorys"></th>
+                   <th><input type="checkbox" id="select-all-inventorys-search"></th>
                    <th>Title</th>
                    <th>Category</th>
                    <th>Owner</th>
@@ -58,7 +55,7 @@
            <table class="table table-striped">
                <thead>
                <tr>
-                   <th><input type="checkbox" id="select-all-items"></th>
+                   <th><input type="checkbox" id="select-all-items-search"></th>
                    <th>Custom Id</th>
                    <th>Inventory</th>
                    <th>CreatedBy</th>
@@ -110,7 +107,7 @@
 
 
     <script>
-        document.getElementById('select-all-items').addEventListener('change', function() {
+        document.getElementById('select-all-items-search').addEventListener('change', function() {
             document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
         });
 
@@ -121,7 +118,7 @@
     </script>
 
     <script>
-        document.getElementById('select-all-inventorys').addEventListener('change', function() {
+        document.getElementById('select-all-inventorys-search').addEventListener('change', function() {
             document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
         });
 
@@ -137,16 +134,15 @@
             const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
 
             if (selected) {
-                // Берём ID первого выбранного
+
                 const id = selected.value;
-                // Переходим на edit
+
                 window.location.href = '/inventory/' + id;
             } else {
                 alert('Select an inventory first!');
             }
         });
 
-        // 3. Включаем кнопку при выборе checkbox
         document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
             cb.addEventListener('change', function() {
                 const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
@@ -161,16 +157,16 @@
             const selected = document.querySelector('input[name="items_ids[]"]:checked');
 
             if (selected) {
-                // Берём ID первого выбранного
+
                 const inventoryId = selected.dataset.inventoryId;
-                // Переходим на edit
+
                 window.location.href = '/inventory/' + inventoryId + '/items';
             } else {
                 alert('Select an items first!');
             }
         });
 
-        // 3. Включаем кнопку при выборе checkbox
+
         document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => {
             cb.addEventListener('change', function() {
                 const hasSelection = document.querySelectorAll('input[name="items_ids[]"]:checked').length > 0;
@@ -181,14 +177,4 @@
 
 {% endblock %}
 
-{#
-<td>
-    <a href="{{ path('app_inventory_show', {'id': inventory.id}) }}"
-       class="btn btn-sm btn-info">View</a>
-</td> #}
-
-{#                     <td>
-                           <a href="{{ path('app_inventory_items', {'inventoryId': item.inventory.id}) }}"
-                              class="btn btn-sm btn-info">View Inventory</a>
-                       </td> #}
 

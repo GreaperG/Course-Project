@@ -12,7 +12,7 @@
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
             <tr>
-                <th><input type="checkbox" id="select-all"></th>
+                <th><input type="checkbox" id="select-all-inventorys-index"></th>
                 <th class="text-center">Id</th>
                 <th>Category</th>
                 <th>Items</th>
@@ -88,7 +88,7 @@
 
 
     <script>
-        document.getElementById('select-all').addEventListener('change', function() {
+        document.getElementById('select-all-inventorys-index').addEventListener('change', function() {
             document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
         });
 
@@ -104,16 +104,13 @@
                     const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
 
                     if (selected) {
-                        // Берём ID первого выбранного
                         const id = selected.value;
-                        // Переходим на edit
                         window.location.href = '/inventory/' + id + '/edit';
                     } else {
                         alert('Select an inventory first!');
                     }
                 });
 
-                // 3. Включаем кнопку при выборе checkbox
                 document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
                     cb.addEventListener('change', function() {
                         const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
@@ -129,12 +126,9 @@
         if (selected) {
             const inventoryId = parseInt(selected.value);
             window.location.href = `/inventory/${inventoryId}/createItem`;
-            // Или с использованием path():
-            // window.location.href = Routing.generate('app_inventory_item_create', {inventoryId: inventoryId});
         }
     });
 
-    // Включаем/выключаем кнопки при выборе чекбокса
     document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
         cb.addEventListener('change', function() {
             const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
@@ -151,7 +145,6 @@
 
                         if (selected) {
                             const inventoryId = selected.value;
-                            // Переходим на страницу просмотра инвентаря
                             window.location.href = `/inventory/${inventoryId}`;
                         } else {
                             alert('Please select an inventory first!');

@@ -44,9 +44,7 @@ class ItemType extends AbstractType
 
             $inventory = $item->getInventory();
 
-            // Для каждого InventoryAttribute добавляем поле в форму
             foreach ($inventory->getInventoryAttributes() as $attribute) {
-                // Найти существующее значение для этого attribute
                 $existingValue = null;
                 foreach ($item->getItemAttributeValues() as $attrValue) {
                     if ($attrValue->getAttribute()->getId() === $attribute->getId()) {
@@ -55,15 +53,13 @@ class ItemType extends AbstractType
                     }
                 }
 
-                // Определить тип поля по типу атрибута
                 $fieldType = $this->getFieldTypeForAttribute($attribute->getType());
 
-                // Добавить поле в форму
                 $form->add('attr_' . $attribute->getId(), $fieldType, [
                     'label' => $attribute->getName(),
                     'required' => $attribute->isRequired(),
-                    'mapped' => false, // НЕ мапим напрямую на Item
-                    'data' => $existingValue, // Подставляем существующее значение
+                    'mapped' => false,
+                    'data' => $existingValue,
                 ]);
             }
         });
@@ -72,10 +68,10 @@ class ItemType extends AbstractType
     private function getFieldTypeForAttribute(AttributeType $type): string
     {
         return match($type) {
-            AttributeType::STRING => TextType::class,        // Короткий текст
-            AttributeType::TEXT => TextareaType::class,      // Длинный текст
-            AttributeType::INTEGER => NumberType::class,     // Число
-            AttributeType::BOOLEAN => CheckboxType::class,   // Чекбокс
+            AttributeType::STRING => TextType::class,
+            AttributeType::TEXT => TextareaType::class,
+            AttributeType::INTEGER => NumberType::class,
+            AttributeType::BOOLEAN => CheckboxType::class,
             default => TextType::class,
         };
     }
