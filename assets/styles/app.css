@@ -85,6 +85,7 @@ body {
 .dark-mode .inventory-description,
 .dark-mode .container h1,
 .dark-mode .container h3,
+.dark-mode .help-text,
 .dark-mode .sidebar-title
 {
     color: #fff;
