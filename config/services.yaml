@@ -18,7 +18,7 @@ services:
             $em: '@doctrine.orm.entity_manager'
         tags:
             - { name: security.voter }
-    App\EventListnere\AccessDeniedListener:
+    App\EventListener\AccessDeniedListener:
         tags:
             - {name: kernel.event_listener, event: kernel.exception, method: onKernelException}
 
