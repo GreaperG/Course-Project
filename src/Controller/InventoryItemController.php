@@ -103,13 +103,10 @@ final class InventoryItemController extends AbstractController
             return $this->redirectToRoute('app_inventory_items', [
                 'inventoryId' => $inventoryId,
             ]);
-          } catch (OptimisticLockException $e) {
-              $this->addFlash('error', 'Inventory was modified by someone else.');
-              $em->refresh($inventory);
+          } catch (\Exception $e) {
+              $this->addFlash('error', 'Error creating item.');
           }
     }
-
-
         return $this->render('inventory_item/create.html.twig', [
             'form' => $form->createView(),
             'inventory' => $inventory,
