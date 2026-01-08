@@ -10,7 +10,7 @@ import './styles/app.css';
 import 'bootstrap';
 import './inventory-index.js';
 import './item-index.js';
-import './search';
+import './search.js';
 
 document
     .querySelectorAll('.add_item_link')
