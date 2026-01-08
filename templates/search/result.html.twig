@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/search.js') }}"></script>
+{% endblock %}
+
 {% block title %}Search Results{% endblock %}
 
 {% block body %}
@@ -102,78 +107,6 @@
     {% endif %}
   </div>
 </div>
-
-
-
-
-    <script>
-        document.getElementById('select-all-items-search').addEventListener('change', function() {
-            document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => cb.checked = this.checked);
-        });
-
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        tooltipTriggerList.map(function(el) {
-            return new bootstrap.Tooltip(el)
-        });
-    </script>
-
-    <script>
-        document.getElementById('select-all-inventorys-search').addEventListener('change', function() {
-            document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
-        });
-
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        tooltipTriggerList.map(function(el) {
-            return new bootstrap.Tooltip(el)
-        });
-    </script>
-
-    <script>
-
-        document.getElementById('viewInventorySelectedBtn').addEventListener('click', function() {
-            const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
-
-            if (selected) {
-
-                const id = selected.value;
-
-                window.location.href = '/inventory/' + id;
-            } else {
-                alert('Select an inventory first!');
-            }
-        });
-
-        document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
-            cb.addEventListener('change', function() {
-                const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
-                document.getElementById('viewInventorySelectedBtn').disabled = !hasSelection;
-            });
-        });
-    </script>
-
-    <script>
-
-        document.getElementById('viewItemSelectedBtn').addEventListener('click', function() {
-            const selected = document.querySelector('input[name="items_ids[]"]:checked');
-
-            if (selected) {
-
-                const inventoryId = selected.dataset.inventoryId;
-
-                window.location.href = '/inventory/' + inventoryId + '/items';
-            } else {
-                alert('Select an items first!');
-            }
-        });
-
-
-        document.querySelectorAll('input[name="items_ids[]"]').forEach(cb => {
-            cb.addEventListener('change', function() {
-                const hasSelection = document.querySelectorAll('input[name="items_ids[]"]:checked').length > 0;
-                document.getElementById('viewItemSelectedBtn').disabled = !hasSelection;
-            });
-        });
-    </script>
 
 {% endblock %}
 
