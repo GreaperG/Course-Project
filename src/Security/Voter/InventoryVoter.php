@@ -72,10 +72,9 @@ final class InventoryVoter extends Voter
 
         if($access) {
             return match($attribute) {
-              //  self::VIEW => true,
                 self::EDIT => in_array($access->getPermission(), ['edit', 'admin']),
                 self::DELETE => $access->getPermission() === 'admin',
-                self::MANAGE_ACCESS => false, // расшаренные юзеры не могут управлять доступом
+                self::MANAGE_ACCESS => false, 
                 default => false,
             };
         }
