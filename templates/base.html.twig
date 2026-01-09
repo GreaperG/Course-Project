@@ -14,6 +14,18 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <script>
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.documentElement.classList.add('dark-mode');
+            }
+
+            function toggleDarkMode() {
+                let isDark = document.documentElement.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            }
+        </script>
+
     </head>
     <body>
     {% if hide_navbar is not defined or not hide_navbar %}
@@ -66,18 +78,5 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function toggleDarkMode() {
-            let isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-        }
-
-        document.addEventListener('DOMContentLoaded', (event) => {
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-            }
-        });
-    </script>
-
     </body>
 </html>
