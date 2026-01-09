@@ -81,7 +81,7 @@ document.getElementById('deleteSelectedBtn').addEventListener('click', function(
     }
 });
 
-// Включаем кнопки при выборе
+
 document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
     cb.addEventListener('change', function() {
         const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;

@@ -1,11 +1,11 @@
 console.log('inventory-index.js loaded');
 document.addEventListener('DOMContentLoaded', function() {
-    // Select all checkbox
+
     document.getElementById('select-all-inventorys-index').addEventListener('change', function() {
         document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => cb.checked = this.checked);
     });
 
-    // Edit button
+
     document.getElementById('editSelectedBtn').addEventListener('click', function() {
         const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
         if (selected) {
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Add item button
+
     document.getElementById('addItemBtn').addEventListener('click', function() {
         const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
         if (selected) {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Show inventory button
+
     document.getElementById('showInventoryBtn').addEventListener('click', function() {
         const selected = document.querySelector('input[name="inventorys_ids[]"]:checked');
         if (selected) {
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Enable/disable buttons
+
     document.querySelectorAll('input[name="inventorys_ids[]"]').forEach(cb => {
         cb.addEventListener('change', function() {
             const hasSelection = document.querySelectorAll('input[name="inventorys_ids[]"]:checked').length > 0;
