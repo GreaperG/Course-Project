@@ -37,7 +37,7 @@ class ItemType extends AbstractType
             $item = $event->getData();
             $form = $event->getForm();
 
-            // Если нет item или inventory - выходим
+
             if (!$item || !$item->getInventory()) {
                 return;
             }
