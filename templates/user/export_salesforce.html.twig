@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Export to Salesforce</h1>
+    
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-paper-plane"></i> Send to Salesforce
+        </button>
+        <a href="{{ path('app_user_profile') }}" class="btn btn-secondary">Cancel</a>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

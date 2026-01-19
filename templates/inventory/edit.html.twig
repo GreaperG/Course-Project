@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Inventory{% endblock %}
+
+{% block body %}
+    <h1>Edit Inventory</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.Title,{
+                'row_attr':{'class': 'mb-3'},
+                'label_attr':{'class':'form-label'},
+                'attr':{'class': 'form-control'}
+            }) }}
+
+            {{ form_row(form.Description,{
+                'row_attr':{'class': 'mb-3'},
+                'label_attr':{'class':'form-label'},
+                'attr':{'class': 'form-control'}
+            }) }}
+
+            {{ form_row(form.category,{
+                'row_attr':{'class': 'mb-3'},
+                'label_attr':{'class':'form-label'},
+                'attr':{'class': 'form-control'}
+            }) }}
+
+            {{ form_row(form.isPublic,{
+                'row_attr':{'class': 'mb-3'},
+                'label_attr':{'class':'form-check-label'},
+                'attr':{'class': 'form-check-input'}
+            })}}
+
+            <h3>Custom Attributes</h3>
+            <ul
+                class="attributes"
+                data-index="{{ form.inventoryAttributes|length > 0 ? form.inventoryAttributes|last.vars.name +1 : 0 }}"
+                data-prototype="{{ form_widget(form.inventoryAttributes.vars.prototype)|e('html_attr') }}"
+            >
+
+                {% for tag in form.inventoryAttributes %}
+                    <li>
+                        {{ form_row(tag) }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <button type="button"
+                    class="btn btn-outline-dark add_item_link"
+                    data-collection-holder-class="attributes">
+                <i class="fas fa-plus"></i>Add a attribute
+            </button>
+
+
+            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+            <a href="{{path('app_inventory_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i>Back to list
+            </a>
+
+            <a href="{{ path('app_inventory_items', {'inventoryId':inventory.id}) }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i>Add items
+            </a>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

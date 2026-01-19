@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>User Profile</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Email:</strong> {{ app.user.email }}</p>
+            <p><strong>Username:</strong> {{ app.user.username }}</p>
+            
+            <a href="{{ path('app_user_export_salesforce') }}" class="btn btn-primary">
+                <i class="fas fa-cloud-upload"></i> Export to Salesforce
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

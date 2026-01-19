@@ -1,0 +1,339 @@
+body {
+    background-color: #FFFFFF;
+}
+
+:root {
+    --background-color-light: #ffffff;
+    --text-color-light: #000000;
+    --background-color-dark: #121212;
+    --text-color-dark: #ffffff;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Navbar fix */
+.dark-mode .navbar {
+    background-color: #1e1e1e !important;
+}
+
+.dark-mode .nav-link {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .navbar-brand {
+    color: #e0e0e0 !important;
+}
+
+/* Tables fix */
+.dark-mode .table {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #252525;
+}
+
+.dark-mode .card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .card * {
+    color: #fff !important;
+}
+
+.dark-mode .form-control {
+    color: #252525 !important;
+}
+
+.dark-mode .form-control::placeholder {
+    color: #888;
+}
+
+.dark-mode .text-muted {
+    opacity: 0.8;
+}
+
+.dark-mode .alert-info {
+    background-color: #0c5460;
+    border-color: #1b6d85;
+    color: #d1ecf1;
+}
+
+.dark-mode .alert-info .alert-link {
+    color: #a6e3ff;
+}
+
+.dark-mode .btn.btn-outline-dark,
+.dark-mode .sidebar,
+.dark-mode .simple-sidebar
+{
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+.dark-mode .sidebar-block
+{
+    background-color: #252525;
+}
+.dark-mode .inventory-title,
+.dark-mode .inventory-category,
+.dark-mode .inventory-description,
+.dark-mode .container h1,
+.dark-mode .container h3,
+.dark-mode .help-text,
+.dark-mode .sidebar-title
+{
+    color: #fff;
+}
+
+.dark-mode .inventory-item {
+    background-color: #2a2a2a;
+    border-color: #333;
+}
+.dark-mode .inventory-item:hover {
+    background: #2a2a2a;
+    border-color: #007bff;
+    transform: translateX(5px);
+}
+
+
+.form-control-limited {
+    max-width: 500px;
+}
+.page-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.simple-sidebar {
+    width: 300px;
+    background: #f5f5f5;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    margin-top: 60px;
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.sidebar-block {
+    margin-bottom: 30px;
+}
+
+.sidebar-title {
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inventory-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.3s;
+}
+
+.inventory-item:hover {
+    background: #f0f8ff;
+    border-color: #007bff;
+    transform: translateX(5px);
+}
+
+.inventory-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.inventory-description {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.inventory-category {
+    font-size: 0.8em;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.no-inventories {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Основной контент */
+.main-content {
+    margin-left: 320px; /* Ширина sidebar + отступ */
+    padding: 30px;
+    flex: 1;
+}
+/* Таблица Inventories */
+.table-inventories {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid #dee2e6;
+}
+
+.table-inventories thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.table-inventories thead th {
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-inventories tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.table-inventories tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+.table-inventories tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border: none;
+}
+
+/* Стили для ID */
+.inventory-id {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 1.1rem;
+}
+
+/* Стили для категории */
+.inventory-category {
+    color: #2d3436;
+    font-weight: 500;
+}
+
+/* Стили для items */
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.item-badge {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 15px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    color: #495057;
+}
+
+.items-column {
+    max-height: 200px;      /* максимальная высота */
+    overflow-y: auto;       /* скролл если много */
+    white-space: nowrap;    /* не переносить */
+}
+
+/* Стили для кнопок действий */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-show {
+    background: #667eea;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-show:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.btn-edit {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-edit:hover {
+    background: #e9ecef;
+    transform: translateY(-1px);
+    color: #212529;
+}
+
+/* Кнопка создания */
+.btn-create {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-create:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 7px solid #007bff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    width: 300px;
+
+}
+
+.sidebar h4 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}

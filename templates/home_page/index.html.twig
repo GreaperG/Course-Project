@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card-shadow">
+                    <div class="card-body">
+                        <h3 class="text-center mt-4">Latest Inventories</h3>
+
+                        {% for inventory in latestPagination %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <h5>{{ inventory.title }}</h5>
+                                    <p>{{ inventory.description|default('No description') }}</p>
+                                    <small class="text-muted">
+                                        Created by: {{ inventory.owner.username }}
+                                    </small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="navigation">
+                            {{ knp_pagination_render(latestPagination) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="sidebar">
+                    <h4>Most Popular</h4>
+
+                    {% for inventory in popularInventories %}
+                        <div class="card mb-2">
+                            <h5>{{ inventory['itemsCount'] }} items</h5>
+                            <p>{{ inventory[0].title }}</p>
+                            <p>{{ inventory[0].description|default('No description') }}</p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

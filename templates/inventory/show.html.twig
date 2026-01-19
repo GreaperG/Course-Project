@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-16 col-lg-12">
+          <h1>Inventory "{{ inventory.title }}"</h1>
+    <table class="table table-striped table-hover table-bordered">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ inventory.id }}</td>
+            </tr>
+            <tr>
+                <th>items</th>
+                <td>{{ inventory.items|length }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ inventory.owner.username }}</td>
+            </tr>
+        <tr>
+            <th>UpdatedAt</th>
+            <td>{{ inventory.updatedAt|date('Y-m-d H:i') }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_inventory_index') }}" class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>Back to List
+    </a>
+
+    <a href="{{ path('app_inventory_edit', {'id': inventory.id}) }}" class="btn btn-outline-dark">
+        <i class="fas fa-arrow-left"></i>Edit Inventory
+    </a>
+
+          <form method="post" action="{{ path('app_inventory_delete', {'id': inventory.id}) }}"
+                onsubmit="return confirm('Are you sure you want to delete this item?');" class="d-inline">
+              <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ inventory.id) }}">
+              <button type="submit" class="btn btn-outline-dark">
+                  <i class="fas fa-trash"></i> Delete
+              </button>
+          </form>
+
+          {% if is_granted('MANAGE_ACCESS', inventory) %}
+              <div class="card mt-4">
+                  <div class="card-header">
+                      <h6 class="mb-0"><i class="fas fa-share-alt"></i> Share Inventory</h6>
+                  </div>
+                  <div class="card-body">
+                      <form method="post" action="{{ path('app_inventory_share', {'id': inventory.id}) }}">
+                          <input type="hidden" name="token" value="{{ csrf_token('share') }}">
+                          <div class="row g-2">
+                              <div class="col">
+                                  <input type="text" name="username" class="form-control form-control-sm" placeholder="username" required>
+                              </div>
+                              <div class="col">
+                                  <select name="permission" class="form-select form-select-sm">
+                                      <option value="edit">Edit</option>
+                                      <option value="admin">Admin</option>
+                                  </select>
+                              </div>
+                              <div class="col-auto">
+                                  <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Share</button>
+                              </div>
+                          </div>
+                      </form>
+
+                      {% if inventory.inventoryAccesses|length > 0 %}
+                          <hr class="my-3">
+                          <h6 class="mb-2">Shared with:</h6>
+                          <div class="list-group list-group-flush">
+                              {% for access in inventory.inventoryAccesses %}
+                                  <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-0">
+                                      <div>
+                                          <span class="fw-medium">{{ access.user.username }}</span>
+                                          <span class="badge bg-{{ access.permission == 'admin' ? 'danger' : 'warning' }} ms-2">{{ access.permission }}</span>
+                                      </div>
+                                      <form method="post" action="{{ path('app_inventory_revoke', {'id': inventory.id, 'userId': access.user.id}) }}" onsubmit="return confirm('Revoke access?')">
+                                          <input type="hidden" name="token" value="{{ csrf_token('revoke') }}">
+                                          <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-times"></i></button>
+                                      </form>
+                                  </div>
+                              {% endfor %}
+                          </div>
+                      {% endif %}
+                  </div>
+              </div>
+          {% endif %}
+
+            </div>
+      </div>
+</div>
+
+{% endblock %}
