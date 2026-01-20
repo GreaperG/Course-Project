@@ -41,12 +41,7 @@ class InventoryType extends AbstractType
             ])
             ->add('version', HiddenType::class, [
                 'mapped' => true,
-            ])
-            ->add('primary', CheckboxType::class, [
-                'mapped' => true,
-                'required' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
