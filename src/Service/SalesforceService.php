@@ -87,30 +87,6 @@ class SalesforceService
         'contactId' => $contactData['id'],
     ];
   }
-
-  public function createContact(string $accountId, string $firstName, string $lastName, string $email): string
-  {
-
-    if(!$this->accessToken){
-        $this->authenticate();
-    }
-  
-    $response = $this->httpClient->request('POST', $this->instanceUrl . '/services/data/v58.0/sobjects/Contact', [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $this->accessToken,
-            'Content-Type' => 'application/json',
-        ],
-        'json' => [
-            'AccountId' => $accountId,
-            'FirstName' => $firstName,
-            'LastName' => $lastName,
-            'Email' => $email,
-        ],
-    ]);
-
-    $data = $response->toArray();
-    return $data['id'];
-  }
 }
 
 ?>
