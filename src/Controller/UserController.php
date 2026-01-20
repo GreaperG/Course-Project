@@ -33,12 +33,11 @@ class UserController extends AbstractController
             $data = $form->getData();
 
             try {
-                // 1. Создать Account
-                $accountId = $salesforceService->createAccountAndContact(
+                $result = $salesforceService->createAccountAndContact(
                     $data['company'],
                     $data['phone'],
-                    $user->getUsername(),
-                    'User',
+                    $data['FirstName'],
+                    $data['LastName'],
                     $user->getEmail(),
                     $data['website'] ?? null,
                     $data['industry'] ?? null

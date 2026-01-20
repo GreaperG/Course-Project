@@ -44,36 +44,48 @@ class SalesforceService
     string $email,
     ?string $website = null,
     ?string $industry = null
-    ): string
+    ): array
   {
     if(!$this->accessToken){
         $this->authenticate();
     }
-    $accountData = [
-        'Name' => $companyName,
-        'Phone' => $phone,
-    ];
 
-    if($website){
-        $accountData['Website'] = $website;
-    }
-
-    if($industry){
-        $accountData['Industry'] = $industry;
-    }
-    
-
-
-    $response = $this->httpClient->request('POST', $this->instanceUrl . '/services/data/v58.0/sobjects/Account', [
+    $accountResponse = $this->httpClient->request('POST', $this->instanceUrl . '/services/data/v58.0/sobjects/Account', [
         'headers' => [
             'Authorization' => 'Bearer ' . $this->accessToken,
             'Content-Type' => 'application/json',
         ],
-        'json' => $accountData,
+        'json' => array_filter([
+            'Name' => $companyName,
+            'Phone' => $phone,
+            'Website' => $website,
+            'Industry' => $industry,
+        ]),
     ]);
 
-    $data = $response->toArray();
-    return $data['id'];
+    $accountData = $accountResponse->toArray();
+    $accountId = $accountData['id'];
+    
+    $contactResponse = $this->httpClient->request('POST', $this->instanceUrl . '/services/data/v58.0/sobjects/Contact',[
+        'headers' => [
+            'Authorization' => 'Bearer ' . $this->accessToken,
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'AccountId' => $accountId,
+            'FirstName' => $firstName,
+            'LastName' => $lastName,
+            'Email' => $email,
+            'Phone' => $phone,
+        ],
+    ]);
+
+    $contactData = $contactResponse->toArray();
+
+    return [
+        'accountId' => $accountId,
+        'contactId' => $contactData['id'],
+    ];
   }
 
   public function createContact(string $accountId, string $firstName, string $lastName, string $email): string

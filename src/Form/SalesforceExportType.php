@@ -13,6 +13,14 @@ class SalesforceExportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
       $builder
+      ->add('FirstName', TextType::class,[
+        'label' => 'First Name',
+        'required' => true,
+      ])
+      ->add('LastName', TextType::class,[
+        'label' => 'Last Name',
+        'required' => true,
+      ])
       ->add('company', TextType::class, [
         'label' => 'Company Name',
         'required' => true,
